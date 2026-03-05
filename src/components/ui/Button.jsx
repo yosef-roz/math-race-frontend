@@ -6,4 +6,4 @@ function Button({children, style, ...props}) {
     )
 }
 
-export default Button
+export default Button;

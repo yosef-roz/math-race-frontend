@@ -1,0 +1,8 @@
+.history-item {
+    gap: 6px;
+}
+
+@media (max-width: 768px) {
+    .history-item {
+    }
+}

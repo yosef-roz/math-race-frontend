@@ -8,4 +8,4 @@ function Input({style, ...props}) {
     )
 }
 
-export default Input
+export default Input;

@@ -1,0 +1,21 @@
+.dashboard-items {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.dashboard-items > * {
+    flex: 1;
+    max-width: 450px;
+}
+
+@media (max-width: 768px) {
+    .dashboard-items {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dashboard-items > * {
+        width: 100%;
+    }
+}

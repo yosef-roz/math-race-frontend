@@ -15,4 +15,4 @@ function Card({children, style, ...props}) {
     )
 }
 
-export default Card
+export default Card;
