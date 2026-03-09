@@ -9,6 +9,7 @@ import MainLayout from "./layouts/MainLayout.jsx";
 import DashboardPage from "./pages/dashboard/DashboardPage.jsx";
 import GameHistoryPage from "./pages/history/GameHistoryPage.jsx";
 import GameDetailsPage from "./pages/history/GameDetailsPage.jsx";
+import JoinRacePage from "./pages/race/JoinRacePage.jsx";
 
 function App() {
 
@@ -19,6 +20,8 @@ function App() {
                 <Route path="/register" element={<RegisterPage/>}/>
                 <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
                 <Route path="/reset-password" element={<ResetPasswordPage/>}/>
+
+                <Route path="/race/join" element={<JoinRacePage/>}/>
 
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<DashboardPage/>}/>

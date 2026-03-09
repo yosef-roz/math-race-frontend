@@ -16,7 +16,7 @@ const forgotPassword = async (email) => {
 };
 
 const changePassword = async (newPassword) => {
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
 
     const response = await apiWithToken().post('/auth/change-password', {password: newPassword});
     return response.data;

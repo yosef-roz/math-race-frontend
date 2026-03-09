@@ -2,8 +2,15 @@ import Card from "../../components/ui/Card.jsx";
 import Button from "../../components/ui/Button.jsx";
 
 import './Dashboard.css'
+import {useNavigate} from "react-router-dom";
 
 function DashboardPage() {
+    const navigate = useNavigate();
+
+    const handleJoinRace = () => {
+        navigate("/race/join");
+    }
+
     return (
         <>
             <div>
@@ -22,7 +29,7 @@ function DashboardPage() {
                 <Card>
                     <h2>Join the Race</h2>
                     <p>Got a room code? Then what are you waiting for! Click the button below, follow the instructions, and start playing!</p>
-                    <Button>Join Race</Button>
+                    <Button onClick={handleJoinRace}>Join Race</Button>
                 </Card>
             </div>
         </>
