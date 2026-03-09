@@ -11,7 +11,7 @@ function LoginPage() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
-        password: ""
+        password: "",
     });
 
     const handleChange = (e) => {
