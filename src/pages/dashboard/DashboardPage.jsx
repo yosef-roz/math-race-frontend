@@ -7,8 +7,8 @@ import {useNavigate} from "react-router-dom";
 function DashboardPage() {
     const navigate = useNavigate();
 
-    const handleJoinRace = () => {
-        navigate("/race/join");
+    const handleSubmit = (e) => {
+        navigate("/race/"+e.target.name);
     }
 
     return (
@@ -23,13 +23,13 @@ function DashboardPage() {
                     <p>
                         Create a new room and select your preferred difficulty level. Share the unique code with others so they can join, and watch the race unfold in real time
                     </p>
-                    <Button>Create Race</Button>
+                    <Button name={"create"} onClick={handleSubmit}>Create Race</Button>
                 </Card>
 
                 <Card>
                     <h2>Join the Race</h2>
                     <p>Got a room code? Then what are you waiting for! Click the button below, follow the instructions, and start playing!</p>
-                    <Button onClick={handleJoinRace}>Join Race</Button>
+                    <Button  name={"join"} onClick={handleSubmit}>Join Race</Button>
                 </Card>
             </div>
         </>

@@ -1,0 +1,11 @@
+.form-race {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-race form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

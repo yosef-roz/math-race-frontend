@@ -1,15 +1,16 @@
 import Card from "../../components/ui/Card.jsx";
 import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
-import {useState} from "react";
+import {useState, useContext} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
 import "./Auth.css";
 import {login} from "../../services/authService.js";
-import {cookieService} from "../../services/cookieService.jsx";
+import { WebSocketContext } from "../../services/WebSocketContext.js";
 
 function LoginPage() {
     const navigate = useNavigate();
+    const { updateToken } = useContext(WebSocketContext);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -31,7 +32,7 @@ function LoginPage() {
             if (response.success === true) {
                 console.log(response);
                 console.log("Logged in successfully!");
-                cookieService.setToken(response.data.token,response.data.dayToSaveToken);
+                updateToken(response.data.token, response.data.dayToSaveToken);
                 navigate("/");
 
             }else {

@@ -37,11 +37,35 @@ const changePassword = async (newPassword) => {
     return response.data;
 };
 
+const createRace = async (userData) => {
+    const response = await apiWithToken.post('/race/create', userData);
+    return response.data;
+};
+
+const joinRace = async (userData) => {
+    const response = await apiWithToken.post('/race/join', userData);
+    return response.data;
+};
+
+const createGuestId = async () => {
+    const response = await apiWithOutToken.get('/auth/create-guestId');
+    return response.data;
+};
+
+const raceInfo = async (roomCode) => {
+    const response = await apiWithToken.post('/race/info', roomCode);
+    return response.data;
+};
+
 export {
     login,
     register,
     forgotPassword,
     resetPassword,
     verifyAccount,
-    changePassword
+    changePassword,
+    createRace,
+    joinRace,
+    createGuestId,
+    raceInfo
 };
