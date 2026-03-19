@@ -6,6 +6,7 @@ import Card from "../../components/ui/Card.jsx";
 
 import './JoinRacePage.css';
 import {joinRace} from "../../services/authService.js";
+import {useWebSocket} from "../../services/WebSocketContext.js";
 
 const initialFormState = {
     nickname: "",
@@ -14,6 +15,7 @@ const initialFormState = {
 
 function JoinRacePage() {
     const navigate = useNavigate();
+    const { clearError, clearLastMessage } = useWebSocket();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState(initialFormState);
 
@@ -33,11 +35,18 @@ function JoinRacePage() {
         if (isSubmitting) return;
         setIsSubmitting(true);
 
+        clearError();
+        clearLastMessage();
+
         try {
             const response = await joinRace(formData);
             if (response.success) {
-                navigate("/race/" + response.data.code);
-                console.log("הצטרפת לחדר בהצלחה, " + response.data.nickName + " : " + response.data.type);
+                const roomCode = response.data.code;
+                const token = response.data.joinToken;
+                navigate("/race/" + roomCode, {
+                    state: { joinToken: token }
+                });
+                console.log("הצטרפת לחדר בהצלחה, " + response.data.nickname + " : " + response.data.type);
             } else {
                 if (response.errorCode === 1007) {
                     alert("ACCOUNT_NOT_FOUND");
@@ -51,9 +60,9 @@ function JoinRacePage() {
                 }
             }
         } catch (err) {
+            console.log(err?.response?.data?.message || "שגיאה לא ידועה");
             alert(err.data.message);
             setFormData(initialFormState)
-            console.log("Join failed:", err);
         }finally {
             setIsSubmitting(false);
         }

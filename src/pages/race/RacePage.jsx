@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useWebSocket } from "../../services/WebSocketContext.js";
 import { useCallback, useEffect, useState } from "react";
 import RacePlayerPage from "./RacePlayerPage.jsx";
@@ -6,11 +6,12 @@ import RaceHostPage from "./RaceHostPage.jsx";
 import { raceInfo } from "../../services/authService.js";
 
 function RacePage() {
+    const location = useLocation();
+    const joinToken = location.state?.joinToken || null;
     const navigate = useNavigate();
     const { roomCode } = useParams();
     const [userRole, setUserRole] = useState('Waiting');
-
-    const { isConnected } = useWebSocket();
+    const { isConnected, error, clearError } = useWebSocket();
 
     const checkInfo = useCallback(async () => {
         try {
@@ -33,6 +34,14 @@ function RacePage() {
     }, [roomCode, navigate]);
 
     useEffect(() => {
+        if (error) {
+            alert(error);
+            clearError();
+            navigate("/");
+        }
+    }, [error, navigate, clearError]);
+
+    useEffect(() => {
         if (isConnected && userRole === 'Waiting') {
             
             Promise.resolve().then(() => {
@@ -40,6 +49,10 @@ function RacePage() {
             });
         }
     }, [isConnected, userRole,checkInfo]);
+
+    if (error) {
+        return <div>מתנתק...</div>;
+    }
 
     if (!isConnected) {
         return <div>מתחבר...</div>;
@@ -52,9 +65,9 @@ function RacePage() {
     return (
         <>
             {userRole === 'HOST' ? (
-                <RaceHostPage roomCode={roomCode} />
+                <RaceHostPage roomCode={roomCode} joinToken={joinToken} />
             ) : (
-                <RacePlayerPage roomCode={roomCode} />
+                <RacePlayerPage roomCode={roomCode} joinToken={joinToken} />
             )}
         </>
     );

@@ -53,7 +53,7 @@ const createGuestId = async () => {
 };
 
 const raceInfo = async (roomCode) => {
-    const response = await apiWithToken.post('/race/info', roomCode);
+    const response = await apiWithToken.post('/race/info', { roomCode });
     return response.data;
 };
 

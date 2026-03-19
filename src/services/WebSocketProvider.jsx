@@ -23,6 +23,13 @@ function WebSocketProvider({ children }) {
         setToken(newToken);
     }, []);
 
+    const clearError = useCallback(() => {
+        setError(null);
+    }, []);
+    const clearLastMessage = useCallback(() => {
+        setLastMessage(null);
+    }, []);
+
     const updateGuestID = useCallback((newGuestID,dayToSave) => {
         if (newGuestID) {
             cookieService.setGuestID(newGuestID, dayToSave);
@@ -50,7 +57,8 @@ function WebSocketProvider({ children }) {
             onConnect: () => {
                 console.log("WS Connected!");
                 setIsConnected(true);
-                setError(null);
+                clearLastMessage();
+                clearError();
                 hasRecovered.current = false;
 
                 client.subscribe('/user/queue/notifications', (message) => {
@@ -73,7 +81,7 @@ function WebSocketProvider({ children }) {
                 const errorMsg = frame.headers['message'];
                 setIsConnected(false);
 
-                if (!hasRecovered.current && (errorMsg === "AUTH_REQUIRED" || errorMsg === "AUTH_FAILED")) {
+                if (!hasRecovered.current && (errorMsg === "MISSING_IDENTIFICATION" || errorMsg === "AUTH_FAILED")) {
                     console.log("Recovering directly from error event...");
                     try {
                         const response = await createGuestId();
@@ -95,12 +103,10 @@ function WebSocketProvider({ children }) {
                 }
             },
             onWebSocketClose: (event) => {
-                console.log(event.value + "ה-Socket נסגר!");
-                setIsConnected(false); // כאן אנחנו מעדכנים את ה-UI שהחיבור נפל
-
-                // ה-event מכיל פרטים כמו:
-                // event.code - קוד השגיאה (למשל 1006 לניתוק לא צפוי)
-                // event.reason - הסיבה שהשרת שלח לסגירה
+                if (event.reason && event.reason.startsWith("DUPLICATE_RACE_CONNECTION")) {
+                    setError(event.reason);
+                }
+                setIsConnected(false);
             },
         });
 
@@ -124,11 +130,18 @@ function WebSocketProvider({ children }) {
         }
     }, [isConnected]);
 
-    const subscribe = useCallback((destination, callback) => {
+    const subscribe = useCallback((destination, callback, joinToken = null) => {
         if (clientRef.current && isConnected) {
+
+            const headers = {};
+            if (joinToken) {
+                headers['Join-Token'] = joinToken;
+            }
+
             const subscription = clientRef.current.subscribe(destination, (message) => {
                 callback(JSON.parse(message.body));
-            });
+            }, headers);
+
             return () => subscription.unsubscribe();
         }
         return () => {};
@@ -138,7 +151,9 @@ function WebSocketProvider({ children }) {
         <WebSocketContext.Provider value={{
             isConnected,
             lastMessage,
+            clearLastMessage,
             error,
+            clearError,
             sendMessage,
             subscribe,
             updateToken
