@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Client } from '@stomp/stompjs';
-import { WebSocketContext } from './WebSocketContext';
-import { cookieService } from './cookieService';
-import {createGuestId} from "./authService.js";
+import { WebSocketContext } from './WebSocketContext.js';
+import { cookieService } from '../cookieService.js';
+import {createGuestId} from "../authService.js";
 
 function WebSocketProvider({ children }) {
     const [isConnected, setIsConnected] = useState(false);
@@ -99,7 +99,7 @@ function WebSocketProvider({ children }) {
                         setError("SERVER_ERROR");
                     }
                 } else {
-                    setError(errorMsg);
+                    setError(errorMsg + " הגיע ממני כן ");
                 }
             },
             onWebSocketClose: (event) => {

@@ -65,7 +65,7 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
                         <div style={styles.hostActions}>
                             <button
                                 onClick={onStartRace}
-                                disabled={raceState.players.length === 0}
+                                disabled={raceState.players.length === -1}
                                 style={raceState.players.length === 0 ? styles.btnDisabled : styles.btnStart}
                             >
                                 התחל את המרוץ עכשיו!

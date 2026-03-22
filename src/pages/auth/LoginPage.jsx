@@ -6,7 +6,7 @@ import {Link, useNavigate} from "react-router-dom";
 
 import "./Auth.css";
 import {login} from "../../services/authService.js";
-import { WebSocketContext } from "../../services/WebSocketContext.js";
+import { WebSocketContext } from "../../services/webSocket/WebSocketContext.js";
 
 function LoginPage() {
     const navigate = useNavigate();

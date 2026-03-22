@@ -12,7 +12,7 @@ import GameDetailsPage from "./pages/history/GameDetailsPage.jsx";
 import JoinRacePage from "./pages/race/JoinRacePage.jsx";
 import VerifyAccountPage from "./pages/auth/VerifyAccountPage.jsx";
 import ChangePasswordPage from "./pages/auth/ChangePasswordPage.jsx";
-import WebSocketProvider from "./services/WebSocketProvider.jsx";
+import WebSocketProvider from "./services/webSocket/WebSocketProvider.jsx";
 import CreatRacePage from "./pages/race/CreatRacePage.jsx";
 import RacePage from "./pages/race/RacePage.jsx";
 

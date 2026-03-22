@@ -1,5 +1,5 @@
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { useWebSocket } from "../../services/WebSocketContext.js";
+import { useWebSocket } from "../../services/webSocket/WebSocketContext.js";
 import { useCallback, useEffect, useState } from "react";
 import RacePlayerPage from "./RacePlayerPage.jsx";
 import RaceHostPage from "./RaceHostPage.jsx";
@@ -25,11 +25,13 @@ function RacePage() {
                 } else {
                     alert(response.message);
                     navigate('/');
+                    console.log("1")
                 }
             }
         } catch (error) {
             alert(error + "שגיאת תקשורת");
             navigate('/');
+            console.log("2")
         }
     }, [roomCode, navigate]);
 
@@ -38,7 +40,9 @@ function RacePage() {
             alert(error);
             clearError();
             navigate("/");
+            console.log("3")
         }
+        console.log("פה2")
     }, [error, navigate, clearError]);
 
     useEffect(() => {
@@ -48,6 +52,7 @@ function RacePage() {
                 checkInfo();
             });
         }
+        console.log("פה1")
     }, [isConnected, userRole,checkInfo]);
 
     if (error) {

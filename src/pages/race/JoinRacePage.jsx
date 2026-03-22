@@ -6,7 +6,7 @@ import Card from "../../components/ui/Card.jsx";
 
 import './JoinRacePage.css';
 import {joinRace} from "../../services/authService.js";
-import {useWebSocket} from "../../services/WebSocketContext.js";
+import {useWebSocket} from "../../services/webSocket/WebSocketContext.js";
 
 const initialFormState = {
     nickname: "",
@@ -25,6 +25,7 @@ function JoinRacePage() {
         setFormData((prev) => ({
             ...prev,
             [name]: value
+
         }));
     };
 

@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {useWebSocket} from "../../services/WebSocketContext.js";
+import {useWebSocket} from "../../services/webSocket/WebSocketContext.js";
 import RaceLobby from "../../components/race/RaceLobby.jsx";
 import RaceActiveHost from "../../components/race/RaceActiveHost.jsx";
 import RaceResults from "../../components/race/RaceResults.jsx";
@@ -30,7 +30,7 @@ function RacePlayerPage({ roomCode, joinToken }) {
             },joinToken
         );
 
-        //sendMessage(`/app/race/${roomCode}/sync`, {});
+        sendMessage(`/app/race/${roomCode}/player/sync`, {});
 
         return () => {
             if (unsubscribeQueue){
@@ -54,12 +54,10 @@ function RacePlayerPage({ roomCode, joinToken }) {
 
     if (!raceState) return <div>טוען נתוני מרוץ...</div>;
 
-    // ניתוב התצוגה לפי סטטוס המירוץ
     switch (raceState.status) {
         case 'PENDING':
-            return <RaceLobby raceState={raceState} onStartRace={handleStartRace} isHost={true} />;
+            return <RaceLobby raceState={raceState}  isHost={false} />;
         case 'IN_PROGRESS':
-        case 'ACTIVE':
             return <RaceActiveHost raceState={raceState} />;
         case 'FINISHED': // או COMPLETED
             return <RaceResults players={raceState.players} />;
