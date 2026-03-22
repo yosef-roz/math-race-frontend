@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useWebSocket} from "../../services/webSocket/WebSocketContext.js";
 import RaceLobby from "../../components/race/RaceLobby.jsx";
 import RaceActiveHost from "../../components/race/RaceActiveHost.jsx";
@@ -10,6 +10,7 @@ function RacePlayerPage({ roomCode, joinToken, accountId }) {
     const navigate = useNavigate();
     const { isConnected, lastMessage,clearLastMessage, sendMessage, subscribe} = useWebSocket();
     const [raceState, setRaceState] = useState(null);
+    const hasSynced = useRef(false);
 
 
     useEffect(() => {
@@ -127,7 +128,11 @@ function RacePlayerPage({ roomCode, joinToken, accountId }) {
             }, joinToken
         );
 
-        sendMessage(`/app/race/${roomCode}/player/sync`, {});
+        if (!hasSynced.current) {
+            sendMessage(`/app/race/${roomCode}/player/sync`, {});
+            hasSynced.current = true;
+        }
+
 
         return () => {
             if (unsubscribeQueue){
@@ -136,6 +141,8 @@ function RacePlayerPage({ roomCode, joinToken, accountId }) {
             if (unsubscribeTopic){
                 unsubscribeTopic();
             }
+
+            hasSynced.current = false;
         };
 
     }, [isConnected, roomCode, sendMessage, subscribe,joinToken]);
