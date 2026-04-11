@@ -6,12 +6,15 @@ const createRace = async (raceData) => {
 };
 
 const joinRace = async (joinData) => {
-    const response = await apiWithToken.post('/race/join', joinData);
+    const response = await apiWithToken.post(`/race/${joinData.roomCode}/join`, {
+        nickname: joinData.nickname,
+    });
     return response.data;
 };
 
 const getRaceInfo = async (roomCode) => {
-    const response = await apiWithToken.post('/race/info', {roomCode});
+    const response =
+        await apiWithToken.get(`/race/${roomCode}/info`);
     return response.data;
 };
 

@@ -58,6 +58,7 @@ function JoinRacePage() {
 
         try {
             const response = await joinRace(formData);
+            console.log(response);
             if (response.success) {
                 const { code, joinToken } = response.data;
                 navigate("/race/" + code, {

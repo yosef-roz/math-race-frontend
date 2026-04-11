@@ -38,7 +38,7 @@ const changePassword = async (newPassword) => {
 };
 
 const createGuestId = async () => {
-    const response = await apiWithOutToken.get('/auth/create-guestId');
+    const response = await apiWithOutToken.post('/auth/create-guestId');
     return response.data;
 };
 
