@@ -21,7 +21,63 @@ function RacePlayerPage({ roomCode, joinToken, accountId }) {
                 console.log("קיבלנו הודעה חדשה מהסוקט:", data);
                 if (data.type === 'RACE_FULL_STATE') {
                     setRaceState(data.data);
-                }else if (data.type === 'NEW_QUESTION') {
+                } else if (data.type === 'JUNCTION_OFFERED') {
+                // השחקן קיבל הצעת צומת!
+                setRaceState(prevState => {
+                    if (!prevState) return null;
+                    return {
+                        ...prevState,
+                        players: prevState.players.map(player => {
+                            if (player.id === accountId) {
+                                return {
+                                    ...player,
+                                    currentQuestion: null, // מוודאים שאין שאלה
+                                    currentJunctionOffer: data.data, // שומרים את ההצעה!
+                                    trackState: data.data.state,
+                                };
+                            }
+                            return player;
+                        })
+                    };
+                });
+            } else if (data.type === 'JUNCTION_CHOOSE' || data.type === 'JUNCTION_TIMEOUT') {
+                // השחקן סיים לבחור (או שנגמר הזמן)
+                setRaceState(prevState => {
+                    if (!prevState) return null;
+                    return {
+                        ...prevState,
+                        players: prevState.players.map(player => {
+                            if (player.id === accountId) {
+                                return {
+                                    ...player,
+                                    currentJunctionOffer: null, // מנקים את ההצעה
+                                    trackState: data.data.state, // מעדכנים את המסלול החדש (אופציונלי, אבל מומלץ לתצוגה)
+                                    totalTrackQuestions: data.data.totalTrackQuestions,
+                                };
+                            }
+                            return player;
+                        })
+                    };
+                });
+            } else if (data.type === 'TRACK_STATE_CHANGED') {
+                // השרת הודיע שחזרנו למסלול הרגיל (או עברנו מסלול)
+                setRaceState(prevState => {
+                    if (!prevState) return null;
+                    return {
+                        ...prevState,
+                        players: prevState.players.map(player => {
+                            if (player.id === accountId) {
+                                return {
+                                    ...player,
+                                    trackState: data.data.state,
+                                    totalTrackQuestions: data.data.totalTrackQuestions,
+                                };
+                            }
+                            return player;
+                        })
+                    };
+                });
+            } else if (data.type === 'NEW_QUESTION') {
                     setRaceState(prevState => {
                         if (!prevState) return null;
                         return {
@@ -157,9 +213,14 @@ function RacePlayerPage({ roomCode, joinToken, accountId }) {
     },[lastMessage,navigate,clearLastMessage]);
 
     const handleAnswerQuestion = (selectedAnswer) => {
-
         sendMessage(`/app/race/${roomCode}/player/submit`, {
             answer: selectedAnswer
+        });
+    };
+
+    const handleChooseJunction = (selectedTrack) => {
+        sendMessage(`/app/race/${roomCode}/player/junction/choose`, {
+            choice: selectedTrack
         });
     };
 
@@ -177,7 +238,7 @@ function RacePlayerPage({ roomCode, joinToken, accountId }) {
             return <RaceLobby raceState={raceState}  isHost={false} />;
         case 'PAUSED':
         case 'IN_PROGRESS':
-            return <RaceActivePlayer raceState={raceState} accountId={accountId} onAnswerQuestion={handleAnswerQuestion}/>;
+            return <RaceActivePlayer raceState={raceState} accountId={accountId} onAnswerQuestion={handleAnswerQuestion} onChooseJunction={handleChooseJunction}/>;
         case 'FINISHED':
             return <RaceResults players={raceState.players} />;
         default:

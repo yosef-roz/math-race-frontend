@@ -1,0 +1,231 @@
+/* =========================================
+   מניעת גלילה מוחלטת
+   ========================================= */
+.race-layout-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 10px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    direction: rtl;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.race-header {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    font-size: 1.2rem;
+    color: var(--text-h);
+}
+
+/* טיימר */
+.timer-wrapper {
+    flex-shrink: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.timer-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+    font-weight: 700;
+    color: var(--text-h);
+    font-size: 1.1rem;
+}
+
+.timer-clock { font-family: var(--mono); font-size: 1.2rem; }
+.timer-container {
+    width: 100%;
+    height: 14px;
+    background: var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.timer-bar {
+    height: 100%;
+    background: var(--blue);
+    transition: width 0.1s linear, background-color 0.3s;
+}
+
+.timer-bar.critical { background: var(--red); }
+.text-critical { color: var(--red); animation: pulse-text 1s infinite; }
+
+/* =========================================
+   כרטיס דינמי עם סיבוב רציף
+   ========================================= */
+.flip-card-container {
+    perspective: 1500px;
+    width: 100%;
+    flex: 1;
+    min-height: 200px;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+/* שני צידי הכרטיס */
+.flip-card-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 40px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* הצד הקדמי (0 מעלות) והצד האחורי (180 מעלות) */
+.face-0 { transform: rotateY(0deg); }
+.face-1 { transform: rotateY(180deg); }
+
+/* =========================================
+   תגיות על הכרטיס (מסתובבות איתו)
+   ========================================= */
+.track-state-badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    padding: 6px 25px;
+    border-radius: 0 0 15px 15px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 5;
+    white-space: nowrap;
+}
+
+.points-tag {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    border: 1px solid var(--accent-border);
+}
+
+.question-text {
+    color: var(--text-h);
+    font-weight: 900;
+    text-align: center;
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-size: clamp(1.5rem, min(5vw, 5vh), 4rem);
+    line-height: 1.3;
+}
+
+/* =========================================
+   עיצוב התוכן בתוך גב הכרטיס (פידבק / חזרה למסלול)
+   ========================================= */
+.feedback-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.returned-track-msg {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    color: var(--blue);
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* =========================================
+   כפתורי תשובה רספונסיביים
+   ========================================= */
+.options-wrapper {
+    height: 35vh;
+    min-height: 180px;
+    flex-shrink: 0;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 15px;
+    width: 100%;
+    height: 100%;
+}
+
+.option-btn {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    border-radius: 16px;
+    border: none;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.2s, filter 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--sans);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+}
+
+.option-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-2px); }
+.option-btn:active:not(:disabled) { transform: translateY(6px); box-shadow: none; }
+.option-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.bg-red { background-color: var(--red); }
+.bg-blue { background-color: var(--blue); }
+.bg-green { background-color: var(--green); }
+.bg-yellow { background-color: var(--yellow); color: var(--text-h); }
+
+.bg-autostrada { background-color: #7f1d1d; }
+.bg-dirtroad { background-color: #b45309; }
+.btn-desc { font-size: clamp(0.9rem, 2vw, 1.1rem); font-weight: 600; margin-top: 5px; opacity: 0.9; }
+
+.feedback-status { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; text-align: center;}
+.feedback-score-anim { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; text-align: center;}
+.text-positive { color: var(--green); }
+.text-negative { color: var(--red); }
+.text-neutral { color: var(--text); }

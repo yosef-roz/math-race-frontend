@@ -88,6 +88,8 @@ function WebSocketProvider({ children }) {
                     console.log("Recovering directly from error event...");
                     try {
                         const response = await createGuestToken();
+                        console.log("כאן");
+                        console.log(response);
 
                         if (response.success) {
                             updateGuestToken(response.data.guestToken,response.data.dayToSave);
