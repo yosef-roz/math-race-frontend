@@ -1,0 +1,131 @@
+/* =========================================
+   TrackGroup.css - משתני צבע ומבנה הזירה
+========================================= */
+:root {
+    /* --- מצב בהיר --- */
+    --track-group-border: #cbd5e1;
+    --track-side-label-border: #cbd5e1;
+    --track-side-label-text: #475569;
+    --track-side-label-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+    --road-dots: rgba(0, 0, 0, 0.05);
+    --dirt-bg: #eab308;
+    --dirt-dot-1: rgba(0, 0, 0, 0.05);
+    --dirt-dot-2: rgba(255, 255, 255, 0.4);
+    --auto-bg: #94a3b8;
+    --reg-bg: #e2e8f0;
+    --road-line: rgba(0, 0, 0, 0.15);
+    --road-bottom-border: rgba(0, 0, 0, 0.08);
+    --finish-bg: #fff;
+    --finish-check: #94a3b8;
+    --car-border: #94a3b8;
+    --wheel-bg: #64748b;
+    --headlight-beam: rgba(218, 200, 87, 0.85);
+    --info-header-bg: #e2e8f0;
+    --info-header-text: #1e293b;
+    --info-header-border: #cbd5e1;
+    --info-body-bg: #fff;
+    --info-content-bg: #f8fafc;
+    --info-text: #1e293b;
+    --bubble-bg: #fff;
+    --bubble-shadow: rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* --- מצב כהה --- */
+        --track-group-border: #111;
+        --track-side-label-border: #111;
+        --track-side-label-text: #fff;
+        --track-side-label-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        --road-dots: rgba(255, 255, 255, 0.03);
+        --dirt-bg: #78350f;
+        --dirt-dot-1: rgba(255, 255, 255, 0.08);
+        --dirt-dot-2: rgba(0, 0, 0, 0.15);
+        --auto-bg: #1e293b;
+        --reg-bg: #2a2d34;
+        --road-line: rgba(255, 255, 255, 0.35);
+        --road-bottom-border: rgba(0, 0, 0, 0.3);
+        --finish-bg: #fff;
+        --finish-check: #000;
+        --car-border: #111;
+        --wheel-bg: #111;
+        --headlight-beam: rgba(255, 255, 180, 0.5);
+        --info-header-bg: #111;
+        --info-header-text: #fff;
+        --info-header-border: #fff;
+        --info-body-bg: #222;
+        --info-content-bg: #1e293b;
+        --info-text: #fff;
+        --bubble-bg: #fff;
+        --bubble-shadow: rgba(0, 0, 0, 0.5);
+    }
+}
+
+.track-group {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    border-bottom: 6px solid var(--track-group-border);
+    position: relative;
+}
+.track-group:last-child { border-bottom: none; }
+
+.track-side-label {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--track-side-label-text); font-weight: 900; font-size: 0.9rem;
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    border-right: 4px solid var(--track-side-label-border);
+    text-transform: uppercase; letter-spacing: 1.5px;
+    text-shadow: var(--track-side-label-shadow);
+}
+
+.roads-container {
+    position: relative; overflow: visible;
+    background-image: radial-gradient(var(--road-dots) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border-color: var(--track-group-border) !important;
+}
+
+.track-DIRT_ROAD .roads-container,
+.track-DIRT_ROAD .track-side-label {
+    background-color: var(--dirt-bg);
+    background-image: radial-gradient(var(--dirt-dot-1) 1px, transparent 1px), radial-gradient(var(--dirt-dot-2) 1.5px, transparent 1.5px);
+    background-size: 15px 15px, 25px 25px; background-position: 0 0, 10px 10px;
+}
+
+.track-AUTOSTRADA .roads-container,
+.track-AUTOSTRADA .track-side-label { background-color: var(--auto-bg); }
+
+.track-REGULAR .roads-container,
+.track-REGULAR .track-side-label { background-color: var(--reg-bg); }
+
+.road { position: relative; height: 80px; width: 100%; }
+
+.road::before {
+    content: ''; position: absolute; top: 38.5px; left: 0; right: 0; height: 3px;
+    background-image: linear-gradient(to right, var(--road-line) 50%, transparent 50%);
+    background-size: 40px 3px; z-index: 2;
+}
+
+.road:not(:last-child) { border-bottom: 2px solid var(--road-bottom-border); }
+
+.finish-line {
+    position: absolute; top: 0; right: 30px; bottom: 0; width: 24px; z-index: 3;
+    background-color: var(--finish-bg);
+    background-image: linear-gradient(45deg, var(--finish-check) 25%, transparent 25%), linear-gradient(-45deg, var(--finish-check) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--finish-check) 75%), linear-gradient(-45deg, transparent 75%, var(--finish-check) 75%);
+    background-size: 12px 12px; background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+    border-left: 2px solid var(--finish-check); border-right: 2px solid var(--finish-check);
+    box-shadow: -5px 0 10px rgba(0,0,0,0.15);
+}
+
+/* אנימציית אוטוסטרדה */
+.track-AUTOSTRADA .road { overflow: hidden; }
+.track-AUTOSTRADA .road::after {
+    content: ''; position: absolute; top: 10px; left: 0; right: 0; bottom: 10px;
+    background-image: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.4) 50%, transparent 100%);
+    background-size: 300px 2px; background-repeat: repeat-y;
+    animation: autostrada-speed 0.5s linear infinite; z-index: 1; pointer-events: none;
+}
+@keyframes autostrada-speed {
+    from { background-position: -300px 15px, -300px 60px; }
+    to { background-position: 100vw 15px, 100vw 60px; }
+}

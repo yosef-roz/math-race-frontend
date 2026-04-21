@@ -1,0 +1,403 @@
+/* --- עיצוב יציב ובטוח --- */
+.race-results-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    direction: rtl;
+    min-height: 100vh;
+    padding: 0 20px 30px 20px;
+    box-sizing: border-box;
+}
+
+/* --- תגית החדר התלויה מלמעלה --- */
+.room-name-tag {
+    background-color: var(--code-bg);
+    border: 3px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    padding: 12px 40px;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--text-h);
+    box-shadow: 0 8px 0 var(--border);
+    margin-bottom: 40px;
+    display: inline-block;
+}
+
+/* הפריסה המרכזית */
+.main-layout {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+}
+
+/* קבוצות הסטטיסטיקות */
+.side-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    width: 280px;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+.side-group .stat-wrapper { width: 130px; }
+.side-group .stat-wrapper:nth-child(3) { width: 100%; margin-top: 10px; }
+
+/* עטיפת העיגול והטקסטים */
+.stat-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.stat-wrapper.dimmed {
+    opacity: 0.3;
+    filter: grayscale(0.8);
+}
+
+.stat-wrapper.highlighted {
+    transform: translateY(-5px) scale(1.05);
+    z-index: 10;
+}
+
+/* בועות הטקסט משויכות לעיגול */
+.stat-label-box {
+    background-color: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 6px 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 110px;
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+/* המשולש של בועת הטקסט */
+.stat-label-box::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: var(--bg);
+    border: 2px solid var(--border);
+    left: 50%;
+    z-index: -1;
+}
+
+.placement-top::after {
+    bottom: -5px;
+    transform: translateX(-50%) rotate(45deg);
+    border-top: none;
+    border-left: none;
+}
+
+.placement-bottom::after {
+    top: -5px;
+    transform: translateX(-50%) rotate(45deg);
+    border-bottom: none;
+    border-right: none;
+}
+
+/* צבע מואר של הבועה */
+.stat-wrapper.highlighted .stat-label-box {
+    border-color: var(--circle-color);
+    background-color: var(--code-bg);
+}
+.stat-wrapper.highlighted .stat-label-box::after {
+    border-color: var(--circle-color);
+    background-color: var(--code-bg);
+}
+
+.title-box {
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--text-h);
+}
+
+/* --- העיגול הסטטיסטי --- */
+.stat-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: var(--bg);
+    border: 4px solid var(--circle-color, var(--border));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text-h);
+    box-shadow: 0 4px 0 var(--border);
+    flex-shrink: 0;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.stat-wrapper.highlighted .stat-circle {
+    box-shadow: 0 0 15px var(--circle-color), 0 4px 0 var(--border);
+}
+
+/* --- תרשים הפאי --- */
+.stat-circle.pie-chart {
+    background: conic-gradient(var(--pie-color-1) 0% var(--pie-percent), var(--pie-color-2) var(--pie-percent) 100%);
+    border: none;
+    box-shadow: 0 4px 0 var(--border), inset 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.stat-circle.pie-chart::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 8px; right: 8px; bottom: 8px;
+    background-color: var(--bg);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.pie-inner-values {
+    z-index: 2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 13px;
+    line-height: 1;
+    font-weight: 900;
+}
+
+.pie-divider {
+    width: 25px;
+    height: 2px;
+    background-color: var(--text);
+    margin: 3px 0;
+    opacity: 0.3;
+}
+
+.pie-legend {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-h);
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.winner-nickname {
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--text-h);
+}
+
+.username-display {
+    font-size: 12px;
+    font-family: var(--mono);
+    font-weight: 700;
+}
+
+.username-blue { color: var(--blue); }
+.username-guest { color: var(--text); opacity: 0.7; }
+
+/* --- העמודה המרכזית החדשה --- */
+.center-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    flex-shrink: 0;
+}
+
+/* פאנל טבלת האלופים */
+.leaderboard-panel {
+    background-color: var(--bg);
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%; /* תופס 100% מהעמודה שלו */
+    box-shadow: 0 8px 0 var(--border);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.leaderboard-title {
+    text-align: center;
+    margin: 0 0 15px 0;
+    font-size: 24px;
+}
+
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    padding-right: 5px;
+    max-height: 550px;
+}
+
+.leaderboard-list::-webkit-scrollbar { width: 8px; }
+.leaderboard-list::-webkit-scrollbar-thumb { background-color: var(--border); border-radius: 4px; }
+
+.leaderboard-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    background-color: var(--code-bg);
+    border-radius: 14px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.leaderboard-row:hover {
+    transform: translateY(-2px);
+    background-color: var(--bg);
+    border-color: var(--border);
+}
+
+.leaderboard-row.dimmed { opacity: 0.4; }
+
+.leaderboard-row.highlighted {
+    background-color: var(--accent-bg);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-border);
+}
+
+.leaderboard-row.current-player {
+    border-color: var(--blue);
+    background-color: rgba(59, 130, 246, 0.05);
+    box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.1);
+}
+
+.name-and-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.you-badge {
+    font-size: 11px;
+    font-weight: 800;
+    background-color: var(--blue);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 8px;
+}
+
+.row-left-side {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rank-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 16px;
+    background-color: var(--border);
+    color: var(--text-h);
+}
+
+.rank-1 { background-color: var(--yellow); color: #fff; box-shadow: 0 3px 0 #d97706; }
+.rank-2 { background-color: #94a3b8; color: #fff; box-shadow: 0 3px 0 #64748b; }
+.rank-3 { background-color: #d97706; color: #fff; box-shadow: 0 3px 0 #92400e; }
+
+.player-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.achievements-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.achievement-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.player-score {
+    font-size: 24px;
+    font-weight: 900;
+    font-family: var(--mono);
+    color: var(--green);
+    text-shadow: 1px 1px 0 var(--code-bg);
+}
+
+/* --- עיצוב כפתור חזרה לבית (מוגן מפני הגדרות גלובליות) --- */
+.back-to-home-btn {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: var(--text) !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    margin-top: 20px !important;
+    padding: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    text-align: center !important;
+    font-family: var(--sans) !important;
+}
+
+.back-to-home-btn:hover {
+    color: var(--text-h) !important;
+    text-decoration: underline !important;
+}
+
+/* התאמה למסכים קטנים */
+@media (max-width: 1024px) {
+    .main-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+    .center-column {
+        width: 100%;
+        max-width: 500px;
+    }
+    .side-group {
+        width: 100%;
+        max-width: 400px;
+    }
+}

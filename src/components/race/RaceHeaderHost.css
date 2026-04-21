@@ -1,0 +1,243 @@
+/* =========================================
+   עיצוב כללי
+========================================= */
+
+.custom-race-header {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    color: var(--text-h);
+    font-family: var(--sans);
+    box-shadow: var(--shadow);
+    margin: 0 auto 20px auto;
+    direction: rtl;
+    position: relative;
+    z-index: 9999;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.header-top-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+/* =========================================
+   צד ימין: קבוצת המידע (חדר + מנהל)
+========================================= */
+.header-info-group {
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 8px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.room-details { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.room-details h2 { margin: 0; font-size: 1.25rem; font-weight: 800; }
+.room-code-wrapper { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: bold; }
+.room-code-box { display: flex; align-items: center; gap: 6px; background: var(--code-bg); border: 1px solid var(--border); border-radius: 6px; padding: 2px 10px; font-family: var(--mono); color: var(--text-h); font-size: 1rem; }
+
+.copy-btn { order: -1; background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; }
+.copy-btn:hover { transform: scale(1.15); }
+.copy-btn:active { transform: scale(0.9); }
+
+.vertical-separator { width: 2px; height: 50px; background-color: rgba(255, 255, 255, 0.5); border-radius: 2px; }
+
+.host-details { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 120px; }
+.host-nickname-wrapper { display: flex; align-items: center; gap: 8px; }
+.host-nickname-large { font-size: 1.3rem; font-weight: 900; color: var(--text-h); }
+.host-username { font-size: 0.95rem; font-family: var(--mono); font-weight: bold; }
+
+.blue-text { color: #3b82f6; }
+.gray-text { color: var(--text); font-style: italic; font-size: 0.85rem; }
+
+/* =========================================
+   אמצע: טיימר, פס התקדמות ויעד נקודות
+========================================= */
+.header-timer-area {
+    justify-self: center; width: 100%; min-width: 320px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+
+.timer-text { width: 100%; display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; }
+.time-value { font-family: var(--mono); font-size: 1.25rem; }
+.progress-bar-container { width: 100%; height: 14px; background-color: var(--code-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+.progress-bar-fill { height: 100%; background-color: var(--blue); transition: width 1s linear; }
+.title-separator { width: 85%; height: 2px; background-color: rgba(255, 255, 255, 0.5); margin: 2px auto; border-radius: 2px; }
+.target-score { font-size: 1.1rem; color: var(--blue); font-weight: 900; }
+
+/* =========================================
+   צד שמאל: כפתורי שליטה, פס ומידע משתתפים
+========================================= */
+.header-left-group {
+    justify-self: end;
+    align-self: end;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    transform: translateY(2px);
+}
+
+.race-control-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-btn {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: white !important;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.1s;
+    white-space: nowrap;
+    width: 135px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-btn:hover { filter: brightness(1.1); }
+.control-btn:active { transform: scale(0.95); }
+
+.orange-btn { background-color: #f97316 !important; box-shadow: 0 2px 0 #c2410c; }
+.red-btn { background-color: #ef4444 !important; box-shadow: 0 2px 0 #b91c1c; }
+
+.header-actions {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: max-content;
+    white-space: nowrap;
+}
+
+.participants-info { display: flex; gap: 1px; align-items: center; margin-top: -7px; }
+.participants-label, .participants-count { font-size: 0.65rem; color: rgba(255, 255, 255, 0.7); font-weight: normal; }
+
+.players-toggle-btn {
+    background: var(--code-bg);
+    color: var(--text-h);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    padding: 8px 14px;
+    margin: 0 !important;
+    transition: all 0.2s;
+}
+
+.players-toggle-btn:hover, .dropdown-filter-btn:hover { background: var(--border); }
+
+.dropdown-filter-btn { padding: 0 10px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; background: var(--code-bg); color: var(--text-h); border: 2px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+
+/* =========================================
+   כלי סינון וחיפוש ב-Dropdown
+========================================= */
+.players-dropdown {
+    position: absolute; top: 55px; left: 0; background: var(--bg); border: 2px solid var(--border);
+    border-radius: 8px; width: 290px; box-shadow: var(--shadow); padding: 12px; display: flex; flex-direction: column; z-index: 10000;
+}
+
+.dropdown-tools { display: flex; gap: 6px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.dropdown-search-input { flex: 1; background: var(--code-bg); border: 1px solid var(--border); color: var(--text-h); border-radius: 6px; padding: 8px 12px; font-size: 0.9rem; outline: none; transition: border-color 0.2s; font-family: inherit; }
+.dropdown-search-input:focus { border-color: var(--blue); box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
+.no-players-found { text-align: center; color: var(--text); padding: 20px 0; font-size: 0.9rem; }
+
+/* =========================================
+   רשימת השחקנים ועיצוב שורה
+========================================= */
+.players-list { display: flex; flex-direction: column; gap: 8px; max-height: 290px; overflow-y: auto; padding-left: 6px; }
+.players-list::-webkit-scrollbar { width: 6px; }
+.players-list::-webkit-scrollbar-track { background: var(--bg); border-radius: 10px; }
+.players-list::-webkit-scrollbar-thumb { background: var(--text); border-radius: 10px; }
+
+.player-row { position: relative; overflow: hidden; flex-shrink: 0; padding-top: 10px; padding-bottom: 10px; padding-left: 45px; padding-right: 12px; display: flex; justify-content: space-between; align-items: center; background: var(--code-bg); border-radius: 6px; transition: background-color 0.2s, transform 0.1s; }
+.clickable-row { cursor: pointer; }
+.clickable-row:hover { background: var(--border); transform: translateX(-2px); }
+
+.player-identity { display: flex; flex-direction: column; text-align: right; }
+.player-name-wrapper { display: flex; align-items: center; justify-content: flex-start; gap: 8px; }
+.player-nickname { font-weight: bold; font-size: 1.05rem; color: var(--text-h); }
+.player-username { font-size: 0.8rem; margin-top: 2px; font-family: var(--mono); }
+.blue-text { color: var(--blue); }
+.gray-text { color: var(--text); font-style: italic; }
+.player-score { font-weight: 900; background: var(--bg); color: var(--text-h); padding: 6px 10px; border-radius: 6px; font-size: 1rem; border: 1px solid var(--border); }
+
+/* =========================================
+   סטטוס התחברות וקבוע
+========================================= */
+.status-dot { position: static !important; margin: 0 !important; width: 12px; height: 12px; border-radius: 50%; display: block; flex-shrink: 0; }
+.status-dot.online { background-color: #22ea55; box-shadow: 0 0 8px rgba(34, 234, 85, 0.6); animation: pulse-online 2s infinite; }
+@keyframes pulse-online { 0% { box-shadow: 0 0 0 0 rgba(34, 234, 85, 0.5); } 70% { box-shadow: 0 0 0 6px rgba(34, 234, 85, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 234, 85, 0); } }
+.status-dot.offline { background-color: var(--text); }
+.player-row.row-offline { opacity: 0.6; }
+
+/* =========================================
+   כפתור הסרת שחקן
+========================================= */
+.kick-btn { position: absolute; left: 0; top: 0; bottom: 0; width: 22px; background-color: var(--red); color: white; border: none; font-size: 1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transform: translateX(-100%); transition: all 0.2s ease-in-out; border-radius: 6px 0 0 6px; }
+.player-row:hover .kick-btn { opacity: 1; transform: translateX(0); }
+.kick-btn:hover { background-color: #dc2626; box-shadow: inset 0 0 5px rgba(0,0,0,0.3); }
+
+.players-count-footer { position: relative; margin-top: 10px; padding-top: 12px; text-align: center; font-size: 0.85rem; color: var(--text); font-weight: bold; }
+.players-count-footer::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 85%; height: 1px; background-color: var(--border); }
+
+/* =========================================
+   מודאל אישור (מתוקן למסך מלא בלבד!)
+========================================= */
+.confirm-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999 !important;
+    backdrop-filter: blur(4px);
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    /* אנימציה חלקה ללא שינויי מיקומים */
+    animation: modalAppear 0.25s ease-out forwards;
+}
+
+.confirm-modal-box {
+    background: var(--bg);
+    border: 3px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 450px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    direction: rtl;
+}
+
+.modal-title { color: var(--text-h); font-size: 1.5rem; margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+.modal-text { color: var(--text); font-size: 1.1rem; line-height: 1.5; margin-bottom: 25px; }
+.modal-actions { display: flex; justify-content: center; gap: 15px; }
+.modal-btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.modal-confirm-btn { background-color: var(--blue); color: white; }
+.modal-confirm-btn:hover { background-color: #2563eb; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+.modal-cancel-btn { background-color: var(--code-bg); color: var(--text-h); border: 1px solid var(--border); }
+.modal-cancel-btn:hover { background-color: var(--border); }
+
+@keyframes modalAppear {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}

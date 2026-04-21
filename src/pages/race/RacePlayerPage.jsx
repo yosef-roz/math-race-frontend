@@ -240,7 +240,7 @@ function RacePlayerPage({ roomCode, joinToken, accountId }) {
         case 'IN_PROGRESS':
             return <RaceActivePlayer raceState={raceState} accountId={accountId} onAnswerQuestion={handleAnswerQuestion} onChooseJunction={handleChooseJunction}/>;
         case 'FINISHED':
-            return <RaceResults players={raceState.players} />;
+            return <RaceResults raceState={raceState} currentPlayerId={accountId} />;
         default:
             return <div>Invalid race status: {raceState.status}</div>;    }
 }

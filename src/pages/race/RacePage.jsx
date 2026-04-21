@@ -38,14 +38,14 @@ function RacePage() {
         }
     }, [roomCode, navigate]);
 
-    useEffect(() => {
-        if (error) {
-            alert(error);
-            console.log(error);
-            clearError();
-            navigate("/");
-        }
-    }, [error, navigate, clearError]);
+    //useEffect(() => {
+    //    if (error) {
+    //        alert(error);
+    //        console.log(error);
+    //        clearError();
+    //        //navigate("/");
+     //   }
+    //}, [error, navigate, clearError]);
 
     useEffect(() => {
         if (isConnected && userRole === 'Waiting') {
@@ -63,15 +63,15 @@ function RacePage() {
         </div>
     );
 
-    useEffect(() => {
-        return () => {
-            clearError();
-        };
-    }, [clearError]);
+    //useEffect(() => {
+    //    return () => {
+    //        clearError();
+    //    };
+    //}, [clearError]);
 
-    if (error) {
-        return renderLoading("Disconnecting...")
-    }
+    //if (error) {
+      //  return renderLoading("Disconnecting...")
+    //}
 
     if (!isConnected && userRole === 'Waiting') {
         return renderLoading("Connecting...")
