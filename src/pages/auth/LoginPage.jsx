@@ -54,7 +54,7 @@ function LoginPage() {
 
             if (response.success === true) {
                 updateAuthToken(response.data.token, response.data.dayToSaveToken);
-                navigate("/");
+                window.location.href = "/";
             } else {
                 const code = response.errorCode;
                 setErrorMessage(getErrorMessage(code));

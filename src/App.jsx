@@ -11,10 +11,9 @@ import VerifyAccountPage from "./pages/auth/VerifyAccountPage.jsx";
 import ChangePasswordPage from "./pages/auth/ChangePasswordPage.jsx";
 import WebSocketProvider from "./services/webSocket/WebSocketProvider.jsx";
 import CreateRacePage from "./pages/race/CreateRacePage.jsx";
-import RacePage from "./pages/race/RacePage.jsx";
 import GameHistoryPage from "./pages/history/GameHistoryPage.jsx";
 import ProfilePage from "./pages/profile/ProfilePage.jsx";
-import ManageProfileLayout from "./pages/ManageProfileLayout.jsx";
+import ManageProfileLayout from "./layouts/ManageProfileLayout.jsx";
 import StatisticsPage from "./pages/statistics/StatisticsPage.jsx";
 import {useEffect, useState} from "react";
 import {myProfile} from "./services/userProfileService.js";
@@ -23,12 +22,20 @@ import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import RaceHostPage from "./pages/race/RaceHostPage.jsx";
 import RacePlayerPage from "./pages/race/RacePlayerPage.jsx";
+import {cookieService} from "./services/cookieService.js";
 
 function App() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const token = cookieService.getAuthToken();
+
+        if (!token) {
+            setLoading(false);
+            return;
+        }
+
         const fetchUserData = async () => {
             try {
                 const response = await myProfile();
