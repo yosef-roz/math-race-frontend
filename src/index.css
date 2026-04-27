@@ -147,15 +147,7 @@ code {
   box-shadow: 0 8px 0 var(--border);
 }
 
-.game-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 0 var(--border);
-}
 
-.game-card:active {
-  transform: translateY(4px);
-  box-shadow: 0 4px 0 var(--border);
-}
 
 .game-card h2 {
   font-weight: 900;
