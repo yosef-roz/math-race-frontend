@@ -117,7 +117,7 @@ function WebSocketProvider({ children }) {
                 if (event.reason && event.reason.startsWith("DUPLICATE_RACE_CONNECTION")) {
                     console.log(event.reason + " -3-");
                     setError(event.reason);
-                }else if (event.code === 1006) {
+                }else if (event.code === 1006 || event.code === 1000) {
                     console.log("Network dropped or server unreachable.");
                     setError("Session closed.");
                 }
@@ -131,6 +131,10 @@ function WebSocketProvider({ children }) {
 
         client.activate();
         clientRef.current = client;
+
+        window.debugStomp = client;
+        //window.debugStomp.forceDisconnect(); בקונסול
+        // למחוק גם למעלה את השגיאה
 
         return () => {
             if (clientRef.current) {
@@ -167,7 +171,7 @@ function WebSocketProvider({ children }) {
             if (onSubscribeReady) {
                 setTimeout(() => {
                     onSubscribeReady();
-                }, 250);
+                }, 500);
             }
 
             const subscription = clientRef.current.subscribe(destination, (message) => {

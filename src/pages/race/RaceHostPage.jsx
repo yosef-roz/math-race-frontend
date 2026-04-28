@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {useFetcher, useLocation, useNavigate, useParams} from "react-router-dom";
 import { useWebSocket } from "../../services/webSocket/WebSocketContext.js";
 import RaceLobby from "../../components/race/RaceLobby";
 import RaceResults from "../../components/race/RaceResults";
@@ -24,6 +24,30 @@ function RaceHostPage() {
     const [isReconnecting, setIsReconnecting] = useState(false);
     const [topAlert, setTopAlert] = useState(null);
 
+    const showRedirectModal = (title, message) => {
+        setModalConfig({
+            title: title,
+            message: message,
+            autoAction: {
+                delayMs: 5000,
+                action: () => {
+                    setModalConfig(null);
+                    navigate("/");
+                }
+            },
+            buttons: [
+                {
+                    label: "Home",
+                    styleType: "outline",
+                    onClick: () => {
+                        setModalConfig(null);
+                        navigate("/");
+                    }
+                }
+            ]
+        });
+    };
+
     const formatPlayer = (player) => ({
         id: player.id,
         nickname: player.nickname,
@@ -38,7 +62,8 @@ function RaceHostPage() {
             options: player.currentQuestion.options,
             timeLimitMillis: player.currentQuestion.timeLimitMillis,
             questionRemainingTimeMillis: player.currentQuestion.questionRemainingTimeMillis,
-            score: player.currentQuestion.score
+            score: player.currentQuestion.score,
+            receivedAt: Date.now()
         } : null,
 
         currentJunction: player.currentJunction ? {
@@ -46,7 +71,8 @@ function RaceHostPage() {
             offer1: player.currentJunction.offer1,
             offer2: player.currentJunction.offer2,
             timeLimitMillis: player.currentJunction.timeLimitMillis,
-            questionRemainingTimeMillis: player.currentJunction.questionRemainingTimeMillis
+            questionRemainingTimeMillis: player.currentJunction.questionRemainingTimeMillis,
+            receivedAt: Date.now()
         } : null
     });
 
@@ -75,13 +101,13 @@ function RaceHostPage() {
                 setRaceState(prevState => {
                     if (!prevState) return null;
 
-                    if (data.type === 'HOST_CONNECTION' && prevState.host.id === data.data.id) {
+                    if (prevState.host?.id === data.data.id) {
                         return {
                             ...prevState,
                             host: {
                                 ...prevState.host,
                                 online: data.data.online,
-                                nickname: data.data.nickname || prevState.host.nickname
+                                nickname: data.data.nickname
                             }
                         };
                     }
@@ -92,7 +118,7 @@ function RaceHostPage() {
                             p.id === data.data.id ? {
                                 ...p,
                                 online: data.data.online,
-                                nickname: data.data.nickname || p.nickname
+                                nickname: data.data.nickname
                             } : p
                         )
                     };
@@ -148,6 +174,10 @@ function RaceHostPage() {
                 }
 
             } else if (data.type === 'RACE_COMPLETED') {
+                setIsSubscriptionBlocked(true);
+                if (reactivateConnection)
+                    reactivateConnection();
+
                 setRaceState(prevState => {
                     if (!prevState) return null;
                     return {
@@ -197,33 +227,8 @@ function RaceHostPage() {
                         nickname: data.data.host.nickname,
                         online: data.data.host.online
                     },
-                    players: data.data.players.map(player => ({
-                        id: player.id,
-                        userName: player.userName,
-                        nickname: player.nickname,
-                        carColor: player.carColor,
-                        currentScore: player.currentScore,
-                        online: player.online,
-                        trackState: player.trackState,
 
-                        currentQuestion: player.currentQuestion ? {
-                            expression: player.currentQuestion.expression,
-                            options: player.currentQuestion.options,
-                            timeLimitMillis: player.currentQuestion.timeLimitMillis,
-                            questionRemainingTimeMillis: player.currentQuestion.questionRemainingTimeMillis,
-                            score: player.currentQuestion.score,
-                            receivedAt: Date.now()
-                        } : null,
-
-                        currentJunction: player.currentJunction ? {
-                            expression: player.currentJunction.expression,
-                            offer1: player.currentJunction.offer1,
-                            offer2: player.currentJunction.offer2,
-                            timeLimitMillis: player.currentJunction.timeLimitMillis,
-                            questionRemainingTimeMillis: player.currentJunction.questionRemainingTimeMillis,
-                            receivedAt: Date.now()
-                        } : null
-                    }))
+                    players: data.data.players.map(formatPlayer),
                 });
             }
         }, activeJoinToken,() => {
@@ -235,7 +240,7 @@ function RaceHostPage() {
             if (unsubscribeTopic) unsubscribeTopic();
             if (unsubscribeQueue) unsubscribeQueue();
         };
-    }, [isConnected, roomCode, sendMessage, subscribe, activeJoinToken, isSubscriptionBlocked]);
+    }, [isConnected, roomCode, sendMessage, subscribe, activeJoinToken, isSubscriptionBlocked, reactivateConnection, navigate]);
 
     const handleTakeover = async () => {
         setIsReconnecting(true);
@@ -264,41 +269,31 @@ function RaceHostPage() {
         if (error) {
             console.log("הגיע", error);
 
-            if (error === "Session closed."){
+            if (raceState?.status === 'FINISHED'){
+               console.log("אני מתעלם משגיאות בעת סיום מירוץ")
+                //אין צורך לטפל בשגיאות
+            }else if (error === "Session closed."){
                 setTopAlert({
                     type: 'error',
                     message: "החיבור אבד. מנסה להתחבר שוב...",
                     isLoading: true
                 });
-            }else {
-
+            } else {
 
                 setIsSubscriptionBlocked(true);
                 if (reactivateConnection)
                     reactivateConnection();
 
                 if (error === "USER_NOT_IN_ANY_RACE" || error === "NOT_REGISTERED_FOR_RACE") {
-                    setModalConfig({
-                        title: "Access denied",
-                        message: "You are not registered for this race. You will be redirected to the homepage in 5 seconds...",
-                        autoAction: {
-                            delayMs: 5000,
-                            action: () => {
-                                setModalConfig(null);
-                                navigate("/");
-                            }
-                        },
-                        buttons: [
-                            {
-                                label: "Home",
-                                styleType: "outline",
-                                onClick: () => {
-                                    setModalConfig(null);
-                                    navigate("/");
-                                }
-                            }
-                        ]
-                    });
+                    showRedirectModal(
+                        "Access denied",
+                        "You are not registered for this race. You will be redirected to the homepage in 5 seconds..."
+                    );
+                } else if (error === "NOT_RACE_HOST") {
+                    showRedirectModal(
+                        "Access denied",
+                        "You are not the host of this race. You will be redirected to the homepage in 5 seconds..."
+                    );
                 } else if (error === "DUPLICATE_RACE_CONNECTION") {
                     setModalConfig({
                         title: "Connected Elsewhere",
@@ -321,11 +316,12 @@ function RaceHostPage() {
                         ]
                     });
                 }
+
             }
 
             clearError();
         }
-    }, [error, navigate, clearError]);
+    }, [error, navigate, clearError, raceState?.status, reactivateConnection]);
 
     const handleStartRace = () => {
         sendMessage(`/app/race/${roomCode}/host/start`, {});

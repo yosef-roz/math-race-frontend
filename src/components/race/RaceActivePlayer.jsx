@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import './RaceActivePlayer.css';
+import {useWebSocket} from "../../services/webSocket/WebSocketContext.js";
 
 const BUTTON_COLORS = ['bg-red', 'bg-blue', 'bg-green', 'bg-yellow'];
 
 const TRACK_INFO = {
     REGULAR: { text: "Regular Track", color: "var(--blue)" },
     WAITING_FOR_CHOICE: { text: "Crossroads", color: "var(--yellow)" },
-    AUTOSTRADA: { text: "Highway", color: "var(--red)" },
+    AUTOSTRADA: { text: "Autostrada", color: "var(--red)" },
     DIRT_ROAD: { text: "Dirt Road", color: "var(--green)" }
 };
 
@@ -20,9 +21,20 @@ const TrackBadge = ({ trackState, currentQ, totalQ }) => {
     );
 };
 
-function RaceActivePlayer({ raceState, accountId, onAnswerQuestion, onChooseJunction }) {
-    const player = raceState.players.find(p => p.id === accountId);
-    const activeEvent = player?.currentQuestion || player?.currentJunctionOffer;
+function RaceActivePlayer({ raceState, joinToken, onAnswerQuestion, onChooseJunction }) {
+    const { isConnected, subscribe } = useWebSocket();
+
+    // יצירת סטייט מקומי עבור השחקן כדי להגיב מהר לאירועי ה-Queue האישיים שלו
+    const [localPlayer, setLocalPlayer] = useState(raceState.myAccount);
+
+    // סנכרון במקרה של עדכון מצב מלא מהשרת (שהאב מעביר)
+    useEffect(() => {
+        if (raceState.myAccount) {
+            setLocalPlayer(raceState.myAccount);
+        }
+    }, [raceState.myAccount, raceState.receivedAt]);
+
+    const activeEvent = localPlayer?.currentQuestion || localPlayer?.currentJunction;
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [timeLeft, setTimeLeft] = useState(0);
@@ -32,12 +44,52 @@ function RaceActivePlayer({ raceState, accountId, onAnswerQuestion, onChooseJunc
     const [feedbackType, setFeedbackType] = useState('neutral');
 
     const prevEventRef = useRef(activeEvent);
-    const prevTrackRef = useRef(player?.trackState);
-    const prevScoreRef = useRef(player?.currentScore || 0);
+    const prevTrackRef = useRef(localPlayer?.trackState);
+    const prevScoreRef = useRef(localPlayer?.currentScore || 0);
 
+    // האזנה לתורים האישיים של השחקן (שאלות, צמתים, פידבק)
+    useEffect(() => {
+        if (!isConnected) return;
+        const queue = `/user/queue/race/feedback`;
+
+        const unsubscribe = subscribe(queue, (data) => {
+            setLocalPlayer(prevPlayer => {
+                if (!prevPlayer) return null;
+                const updatedPlayer = { ...prevPlayer };
+
+                if (data.type === 'JUNCTION_OFFERED') {
+                    updatedPlayer.currentQuestion = null;
+                    updatedPlayer.currentJunction = data.data;
+                    updatedPlayer.trackState = data.data.state;
+
+                } else if (data.type === 'JUNCTION_CHOOSE' || data.type === 'JUNCTION_TIMEOUT') {
+                    updatedPlayer.currentJunction = null;
+                    updatedPlayer.trackState = data.data.state;
+                    updatedPlayer.totalTrackQuestions = data.data.totalTrackQuestions;
+
+                } else if (data.type === 'TRACK_STATE_CHANGED') {
+                    updatedPlayer.trackState = data.data.state;
+                    updatedPlayer.totalTrackQuestions = data.data.totalTrackQuestions;
+
+                } else if (data.type === 'NEW_QUESTION') {
+                    updatedPlayer.currentQuestion = data.data;
+
+                } else if (data.type === 'CORRECT_ANSWER' || data.type === 'WRONG_ANSWER' || data.type === 'TIMEOUT') {
+                    updatedPlayer.currentQuestion = null;
+                    updatedPlayer.currentScore = prevPlayer.currentScore + (data.data.score || 0);
+                }
+
+                return updatedPlayer;
+            });
+        }, joinToken);
+
+        return () => { if (unsubscribe) unsubscribe(); };
+    }, [isConnected, subscribe, joinToken]);
+
+    // ניהול פידבקים, ניקוד וחזרות ממסלול מיוחד
     useEffect(() => {
         if (prevEventRef.current && !activeEvent) {
-            const diff = (player?.currentScore || 0) - prevScoreRef.current;
+            const diff = (localPlayer?.currentScore || 0) - prevScoreRef.current;
             setScoreDiff(diff);
             if (prevEventRef.current.offer1) setFeedbackType('junction-chosen');
             else if (diff > 0) setFeedbackType('positive');
@@ -45,15 +97,15 @@ function RaceActivePlayer({ raceState, accountId, onAnswerQuestion, onChooseJunc
             else setFeedbackType('neutral');
         }
         prevEventRef.current = activeEvent;
-        prevScoreRef.current = player?.currentScore || 0;
-    }, [activeEvent, player?.currentScore, isSubmitting]);
+        prevScoreRef.current = localPlayer?.currentScore || 0;
+    }, [activeEvent, localPlayer?.currentScore, isSubmitting]);
 
     useEffect(() => {
-        if (player?.trackState === 'REGULAR' && prevTrackRef.current && prevTrackRef.current !== 'REGULAR' && prevTrackRef.current !== 'WAITING_FOR_CHOICE') {
+        if (localPlayer?.trackState === 'REGULAR' && prevTrackRef.current && prevTrackRef.current !== 'REGULAR' && prevTrackRef.current !== 'WAITING_FOR_CHOICE') {
             setIsJustReturned(true);
         }
-        prevTrackRef.current = player?.trackState;
-    }, [player?.trackState]);
+        prevTrackRef.current = localPlayer?.trackState;
+    }, [localPlayer?.trackState]);
 
     useEffect(() => {
         if (activeEvent) {
@@ -62,9 +114,13 @@ function RaceActivePlayer({ raceState, accountId, onAnswerQuestion, onChooseJunc
         }
     }, [activeEvent]);
 
+    // ניהול טיימר השאלה
     useEffect(() => {
         if (!activeEvent || activeEvent.questionRemainingTimeMillis == null) return;
+
+        // משתמשים בזמן שרת, אין טעם לסמוך רק על הזמן המקומי מרגע הקבלה כי זה מתאפס ברינדור
         const endTime = Date.now() + activeEvent.questionRemainingTimeMillis;
+
         const intervalId = setInterval(() => {
             const remaining = Math.max(0, endTime - Date.now());
             setTimeLeft(remaining);
@@ -75,7 +131,7 @@ function RaceActivePlayer({ raceState, accountId, onAnswerQuestion, onChooseJunc
 
     const [flipCount, setFlipCount] = useState(0);
     const [faces, setFaces] = useState({
-        face0: { type: 'QUESTION', data: activeEvent, track: player?.trackState },
+        face0: { type: 'QUESTION', data: activeEvent, track: localPlayer?.trackState },
         face1: null
     });
 
@@ -91,9 +147,9 @@ function RaceActivePlayer({ raceState, accountId, onAnswerQuestion, onChooseJunc
             const nextFaceContent = {
                 type: targetType,
                 data: activeEvent,
-                track: player?.trackState,
-                totalQ: player?.totalTrackQuestions,
-                currentQ: player?.totalTrackQuestions && player?.specialQuestionsRemaining ? (player.totalTrackQuestions - player.specialQuestionsRemaining + 1) : null
+                track: localPlayer?.trackState,
+                totalQ: localPlayer?.totalTrackQuestions,
+                currentQ: localPlayer?.totalTrackQuestions && localPlayer?.specialQuestionsRemaining ? (localPlayer.totalTrackQuestions - localPlayer.specialQuestionsRemaining + 1) : null
             };
 
             setFlipCount(c => c + 1);
@@ -103,9 +159,9 @@ function RaceActivePlayer({ raceState, accountId, onAnswerQuestion, onChooseJunc
             });
             setCurrentFaceId(targetStateId);
         }
-    }, [targetStateId, targetType, activeEvent, player?.trackState, player?.totalTrackQuestions, player?.specialQuestionsRemaining, flipCount, currentFaceId]);
+    }, [targetStateId, targetType, activeEvent, localPlayer?.trackState, localPlayer?.totalTrackQuestions, localPlayer?.specialQuestionsRemaining, flipCount, currentFaceId]);
 
-    if (!player) return <div>Loading data...</div>;
+    if (!localPlayer) return <div>Loading player data...</div>;
 
     const remainingSeconds = Math.ceil(timeLeft / 1000);
     const formattedMinutes = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
@@ -167,8 +223,8 @@ function RaceActivePlayer({ raceState, accountId, onAnswerQuestion, onChooseJunc
     return (
         <div className="race-layout-container">
             <header className="race-header">
-                <div>{player.nickname}</div>
-                <div>Score: <strong>{player.currentScore} / {raceState.targetScore}</strong></div>
+                <div>{localPlayer.nickname}</div>
+                <div>Score: <strong>{localPlayer.currentScore} / {raceState.targetScore}</strong></div>
             </header>
 
             <div style={{ visibility: isQuestionActive ? 'visible' : 'hidden' }}>
