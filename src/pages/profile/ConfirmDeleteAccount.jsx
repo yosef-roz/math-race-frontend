@@ -39,12 +39,12 @@ function ConfirmDeleteAccount() {
 
             if (response.success === true) {
                 setStatus('success');
-                setMessage('Account deleted successfully. We are sorry to see you go! Redirecting to login...');
+                setMessage('Account deleted successfully. We are sorry to see you go! Redirecting to home page...');
 
                 updateAuthToken(null, null);
 
                 setTimeout(() => {
-                    navigate('/auth/login');
+                    navigate('/');
                 }, 4000);
 
             } else {

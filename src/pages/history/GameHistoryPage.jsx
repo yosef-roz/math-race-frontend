@@ -20,6 +20,7 @@ function GameHistoryPage() {
                     setHistoryList(response.data);
                 }
             } catch (err) {
+
                 setError("Failed to load game history.");
                 console.error(err);
             } finally {
@@ -110,11 +111,11 @@ function GameHistoryPage() {
                                         <div className={styles.statsGrid}>
                                             <div className={styles.statBox}>
                                                 <span className={styles.statLabel}>Accuracy</span>
-                                                <span className={styles.statValue}>{expandedGameData.accuracyPercentage}%</span>
+                                                <span className={styles.statValue}>{Number(expandedGameData.accuracyPercentage.toFixed(2))}%</span>
                                             </div>
                                             <div className={styles.statBox}>
                                                 <span className={styles.statLabel}>Avg. Time</span>
-                                                <span className={styles.statValue}>{(expandedGameData.averageResponseTimeMs / 1000).toFixed(1)}s</span>
+                                                <span className={styles.statValue}>{Number((expandedGameData.averageResponseTimeMs / 1000).toFixed(2))}s</span>
                                             </div>
                                             <div className={styles.statBox}>
                                                 <span className={styles.statLabel}>Participants</span>

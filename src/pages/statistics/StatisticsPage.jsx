@@ -49,12 +49,16 @@ function StatisticsPage() {
                 </div>
 
                 <div className={styles.statItem}>
-                    <span className={`${styles.statValue} ${styles.colorGreen}`}>{stats.avgAccuracy.toFixed(1)}%</span>
+                    <span className={`${styles.statValue} ${styles.colorGreen}`}>
+                        {Number(stats.avgAccuracy.toFixed(2))}%
+                    </span>
                     <span className={styles.statLabel}>Average Accuracy</span>
                 </div>
 
                 <div className={styles.statItem}>
-                    <span className={`${styles.statValue} ${styles.colorText}`}>{(stats.avgSuccessTimeMs / 1000).toFixed(1)}s</span>
+                    <span className={`${styles.statValue} ${styles.colorText}`}>
+                        {Number((stats.avgSuccessTimeMs / 1000).toFixed(2))}s
+                    </span>
                     <span className={styles.statLabel}>Avg. Success Time</span>
                 </div>
 
