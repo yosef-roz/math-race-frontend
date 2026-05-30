@@ -1,7 +1,7 @@
 import axios from "axios";
 import {cookieService} from "../services/cookieService.js";
 
-const IP_SERVER = '10.75.100.56:8085';
+const IP_SERVER = '10.136.222.56:8085';
 const BASE_URL = `http://${IP_SERVER}/api`;
 
 const apiWithOutToken = axios.create({

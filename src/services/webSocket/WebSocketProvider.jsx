@@ -15,6 +15,32 @@ function WebSocketProvider({ children }) {
 
     const clientRef = useRef(null);
     const hasRecovered = useRef(false);
+    const watchdogTimerRef = useRef(null);
+
+
+    const resetWatchdog = useCallback(() => {
+        if (watchdogTimerRef.current) {
+            clearTimeout(watchdogTimerRef.current);
+        }
+
+        watchdogTimerRef.current = setTimeout(() => {
+
+            if (clientRef.current && clientRef.current.active) {
+                const ws = clientRef.current.webSocket;
+                if (ws) {
+                    const stompOnClose = ws.onclose;
+
+                    ws.onclose = null;
+                    ws.close();
+
+                    if (typeof stompOnClose === 'function') {
+                        stompOnClose({ code: 1006, reason: 'Watchdog Timeout', wasClean: false });
+                    }
+                }
+            }
+
+        }, 10000);
+    }, []);
 
     const updateAuthToken = useCallback((newToken, dayToSave) => {
         console.log("הגיע להחלף איימל");
@@ -60,8 +86,26 @@ function WebSocketProvider({ children }) {
                 'Is-Recovery': 'false'
             },
             reconnectDelay: 5000,
-            heartbeatIncoming: 4000,
-            heartbeatOutgoing: 4000,
+            heartbeatIncoming: 5000,
+            heartbeatOutgoing: 5000,
+
+            debug: function (str) {
+                console.log("STOMP: " + str);
+            },
+
+            webSocketFactory: () => {
+                const ws = new WebSocket(`ws://${IP_SERVER}/api/ws-race`);
+
+                ws.addEventListener('message', () => {
+                    resetWatchdog();
+                });
+
+                ws.addEventListener('close', () => {
+                    if (watchdogTimerRef.current) clearTimeout(watchdogTimerRef.current);
+                });
+
+                return ws;
+            },
 
             onConnect: () => {
                 console.log("WS Connected!");
@@ -70,6 +114,8 @@ function WebSocketProvider({ children }) {
                 clearError();
                 hasRecovered.current = false;
                 client.connectHeaders['Is-Recovery'] = 'false';
+
+                resetWatchdog();
 
                 client.subscribe('/user/queue/notifications', (message) => {
                     const data = JSON.parse(message.body);
@@ -193,21 +239,27 @@ function WebSocketProvider({ children }) {
         }else {
             console.warn("Attempted to send message while STOMP is not connected. Ignoring.");
         }
-    }, [isConnected]);
+    }, [isConnected])
 
     const subscribe = useCallback((destination, callback, joinToken = null, onSubscribeReady = null) => {
         if (clientRef.current && isConnected) {
 
-            const headers = {};
+            const receiptId = `sub-receipt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+            const headers = {
+                'receipt': receiptId
+            };
+
             if (joinToken) {
                 headers['Join-Token'] = joinToken;
             }
 
-            let timeoutId;
-            if (onSubscribeReady) {
-                timeoutId = setTimeout(() => {
-                    onSubscribeReady();
-                }, 500);
+            if (typeof clientRef.current.watchForReceipt === 'function') {
+                clientRef.current.watchForReceipt(receiptId, () => {
+                    if (onSubscribeReady) {
+                        onSubscribeReady();
+                    }
+                });
             }
 
             const subscription = clientRef.current.subscribe(destination, (message) => {
@@ -215,10 +267,6 @@ function WebSocketProvider({ children }) {
             }, headers);
 
             return () => {
-                if (timeoutId) {
-                    clearTimeout(timeoutId);
-                }
-
                 if (clientRef.current && clientRef.current.connected) {
                     try {
                         subscription.unsubscribe();
