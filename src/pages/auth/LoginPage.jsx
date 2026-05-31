@@ -6,7 +6,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 
 import { login } from "../../services/authService.js";
 import { WebSocketContext } from "../../services/webSocket/WebSocketContext.js";
-import logo from "../../assets/logo.png";
+import logo from "../../../public/logo.png";
 
 import ErrorToast from "../../components/ui/ErrorToast.jsx";
 import { getErrorMessage } from "../../utils/errorMapper.js";
@@ -48,10 +48,43 @@ function LoginPage() {
         }));
     };
 
+    const validateForm = () => {
+        const { email, password } = formData;
+
+        if (!email || email.trim() === "") {
+            setErrorMessage("Email is required");
+            return false;
+        }
+        if (email.length > 255) {
+            setErrorMessage("Email cannot exceed 255 characters");
+            return false;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setErrorMessage("Invalid email format");
+            return false;
+        }
+
+        if (!password || password.trim() === "") {
+            setErrorMessage("Password is required");
+            return false;
+        }
+        if (password.length > 255) {
+            setErrorMessage("Password length is invalid");
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (isLoading) return;
+
+        if (!validateForm()) {
+            return;
+        }
 
         setIsLoading(true);
         setErrorMessage("");
@@ -61,8 +94,6 @@ function LoginPage() {
 
             if (response.success === true) {
                 updateAuthToken(response.data.token, response.data.dayToSaveToken);
-
-                // שימוש ב-navigate במקום רענון עמוד מלא. מחזיר את המשתמש ליעד שחישבנו
                 navigate(from, { replace: true });
             } else {
                 const code = response.errorCode;
@@ -110,6 +141,7 @@ function LoginPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required
+                        maxLength={255}
                         disabled={isLoading}
                     />
                     <Input
@@ -119,6 +151,7 @@ function LoginPage() {
                         value={formData.password}
                         onChange={handleChange}
                         required
+                        maxLength={255}
                         disabled={isLoading}
                     />
                     <Link to={"/auth/forgot-password"}>Forgot password?</Link>

@@ -1,4 +1,5 @@
-/* --- עיצוב יציב ובטוח --- */
+/*RaceResults.css*/
+
 .race-results-container {
     display: flex;
     flex-direction: column;
@@ -12,7 +13,6 @@
     box-sizing: border-box;
 }
 
-/* --- תגית החדר התלויה מלמעלה --- */
 .room-name-tag {
     background-color: var(--code-bg);
     border: 3px solid var(--border);
@@ -27,7 +27,6 @@
     display: inline-block;
 }
 
-/* הפריסה המרכזית */
 .main-layout {
     display: flex;
     flex-direction: row;
@@ -37,7 +36,6 @@
     width: 100%;
 }
 
-/* קבוצות הסטטיסטיקות */
 .side-group {
     display: flex;
     flex-wrap: wrap;
@@ -51,7 +49,6 @@
 .side-group .stat-wrapper { width: 130px; }
 .side-group .stat-wrapper:nth-child(3) { width: 100%; margin-top: 10px; }
 
-/* עטיפת העיגול והטקסטים */
 .stat-wrapper {
     display: flex;
     flex-direction: column;
@@ -71,7 +68,6 @@
     z-index: 10;
 }
 
-/* בועות הטקסט משויכות לעיגול */
 .stat-label-box {
     background-color: var(--bg);
     border: 2px solid var(--border);
@@ -87,7 +83,6 @@
     flex-shrink: 0;
 }
 
-/* המשולש של בועת הטקסט */
 .stat-label-box::after {
     content: '';
     position: absolute;
@@ -113,7 +108,6 @@
     border-right: none;
 }
 
-/* צבע מואר של הבועה */
 .stat-wrapper.highlighted .stat-label-box {
     border-color: var(--circle-color);
     background-color: var(--code-bg);
@@ -129,7 +123,6 @@
     color: var(--text-h);
 }
 
-/* --- העיגול הסטטיסטי --- */
 .stat-circle {
     width: 90px;
     height: 90px;
@@ -152,7 +145,6 @@
     box-shadow: 0 0 15px var(--circle-color), 0 4px 0 var(--border);
 }
 
-/* --- תרשים הפאי --- */
 .stat-circle.pie-chart {
     background: conic-gradient(var(--pie-color-1) 0% var(--pie-percent), var(--pie-color-2) var(--pie-percent) 100%);
     border: none;
@@ -224,7 +216,6 @@
 .username-blue { color: var(--blue); }
 .username-guest { color: var(--text); opacity: 0.7; }
 
-/* --- העמודה המרכזית החדשה --- */
 .center-column {
     display: flex;
     flex-direction: column;
@@ -233,13 +224,12 @@
     flex-shrink: 0;
 }
 
-/* פאנל טבלת האלופים */
 .leaderboard-panel {
     background-color: var(--bg);
     border: 3px solid var(--border);
     border-radius: 20px;
     padding: 20px;
-    width: 100%; /* תופס 100% מהעמודה שלו */
+    width: 100%;
     box-shadow: 0 8px 0 var(--border);
     display: flex;
     flex-direction: column;
@@ -364,7 +354,6 @@
     text-shadow: 1px 1px 0 var(--code-bg);
 }
 
-/* --- עיצוב כפתור חזרה לבית (מוגן מפני הגדרות גלובליות) --- */
 .back-to-home-btn {
     background: transparent !important;
     border: none !important;
@@ -386,7 +375,6 @@
     text-decoration: underline !important;
 }
 
-/* התאמה למסכים קטנים */
 @media (max-width: 1024px) {
     .main-layout {
         flex-direction: column;

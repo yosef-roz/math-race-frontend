@@ -9,7 +9,7 @@ import { forgotPassword } from "../../services/authService.js";
 import ErrorToast from "../../components/ui/ErrorToast.jsx";
 import { getErrorMessage } from "../../utils/errorMapper.js";
 
-import logo from "../../assets/logo.png";
+import logo from "../../../public/logo.png";
 import './Auth.css'
 
 function ForgotPasswordPage() {
@@ -19,16 +19,43 @@ function ForgotPasswordPage() {
     const [errorMessage, setErrorMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    const validateForm = () => {
+        const trimmedEmail = email.trim();
+
+        if (!trimmedEmail) {
+            setErrorMessage("Email is required");
+            return false;
+        }
+
+        if (trimmedEmail.length > 255) {
+            setErrorMessage("Email cannot exceed 255 characters");
+            return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(trimmedEmail)) {
+            setErrorMessage("Invalid email format");
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (isLoading) return;
 
-        setIsLoading(true);
         setErrorMessage("");
 
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsLoading(true);
+
         try {
-            const response = await forgotPassword(email);
+            const response = await forgotPassword(email.trim());
 
             if (response.success === true) {
                 console.log("Password reset link sent to:", email);
@@ -36,7 +63,6 @@ function ForgotPasswordPage() {
                 setEmail("");
             } else {
                 const code = response.errorCode;
-
                 setErrorMessage(getErrorMessage(code));
 
                 if (code === 1301) {
@@ -88,6 +114,9 @@ function ForgotPasswordPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                maxLength={255}
+                                pattern={"^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"}
+                                title={"Invalid email format"}
                                 disabled={isLoading}
                             />
                             <Button type="submit" disabled={isLoading}>

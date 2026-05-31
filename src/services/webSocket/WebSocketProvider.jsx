@@ -43,13 +43,9 @@ function WebSocketProvider({ children }) {
     }, []);
 
     const updateAuthToken = useCallback((newToken, dayToSave) => {
-        console.log("הגיע להחלף איימל");
-        console.log(newToken + " = " + dayToSave);
         if (newToken) {
-            console.log("New Auth-Token Update", newToken);
             cookieService.setAuthToken(newToken, dayToSave);
         } else {
-            console.log("הסיר איימל")
             cookieService.removeAuthToken();
         }
 
@@ -65,7 +61,6 @@ function WebSocketProvider({ children }) {
 
     const updateGuestToken = useCallback((newGuestToken,dayToSave) => {
         if (newGuestToken) {
-            console.log("New Guest-Token Update", newGuestToken);
             cookieService.setGuestToken(newGuestToken, dayToSave);
         } else {
             cookieService.removeGuestToken();
@@ -76,7 +71,6 @@ function WebSocketProvider({ children }) {
 
 
     useEffect(() => {
-        //if (!authToken && !guestToken) return;
 
         const client = new Client({
             brokerURL: `ws://${IP_SERVER}/api/ws-race`,
@@ -88,10 +82,6 @@ function WebSocketProvider({ children }) {
             reconnectDelay: 5000,
             heartbeatIncoming: 5000,
             heartbeatOutgoing: 5000,
-
-            debug: function (str) {
-                console.log("STOMP: " + str);
-            },
 
             webSocketFactory: () => {
                 const ws = new WebSocket(`ws://${IP_SERVER}/api/ws-race`);
@@ -140,12 +130,8 @@ function WebSocketProvider({ children }) {
                 setIsConnected(false);
 
                 if (!hasRecovered.current && (errorMsg === "MISSING_IDENTIFICATION" || errorMsg === "AUTH_FAILED")) {
-                    console.log(errorMsg);
-                    console.log("Recovering directly from error event...");
                     try {
                         const response = await createGuestToken();
-                        console.log("כאן");
-                        console.log(response);
 
                         if (response.success) {
                             updateGuestToken(response.data.guestToken,response.data.dayToSave);
@@ -161,7 +147,6 @@ function WebSocketProvider({ children }) {
                     }
                 } else {
                     setError(errorMsg);
-                    console.log(errorMsg + " -2-");
                 }
             },
             onWebSocketClose: (event) => {
@@ -170,7 +155,6 @@ function WebSocketProvider({ children }) {
 
                 if (event.reason && event.reason.startsWith("DUPLICATE_RACE_CONNECTION") || event.reason === "PLAYER_KICKED"
                     || event.reason === "PLAYER_LEFT") {
-                    console.log(event.reason + " -3-");
                     setError(event.reason);
                 } else {
                     console.log("Network dropped or server unreachable. Code:", event.code);
@@ -187,9 +171,6 @@ function WebSocketProvider({ children }) {
         client.activate();
         clientRef.current = client;
 
-        window.debugStomp = client;
-        //window.debugStomp.forceDisconnect(); בקונסול
-
         const handleOffline = () => {
             console.log("Browser detected network offline!");
             if (clientRef.current) {
@@ -202,7 +183,6 @@ function WebSocketProvider({ children }) {
 
         const handleOnline = () => {
             console.log("Browser detected network online! Reconnecting...");
-            // אם הלקוח קיים והוא לא פעיל, נפעיל אותו מחדש
             if (clientRef.current && !clientRef.current.active) {
                 clientRef.current.activate();
             }

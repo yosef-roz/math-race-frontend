@@ -1,6 +1,4 @@
-/* =========================================
-   CarPlayer.css - הרכבים, בועות וחלוניות מידע
-========================================= */
+/* CarPlayer.css */
 
 .car-container {
     position: absolute;
@@ -31,7 +29,6 @@
 .car-wheel.front { right: 4px; } .car-wheel.back { left: 4px; }
 .car-body span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5; margin: 0; line-height: 1; }
 
-/* אנימציות רכב (מנותק / היילייט) */
 @keyframes blink-beam { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 @keyframes blink-bulb { 0%, 100% { box-shadow: inset -3px 0 0 rgba(255, 255, 255, 0.9); } 50% { box-shadow: inset -3px 0 0 rgba(255, 255, 255, 0.1); } }
 .car-container.car-offline .car-body::after { animation: blink-beam 0.8s infinite ease-in-out; }
@@ -47,7 +44,6 @@
     100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 0px transparent); }
 }
 
-/* בועות (Bubbles) */
 .car-bubble {
     position: absolute; bottom: calc(100% + 20px); left: 50%; transform: translateX(-50%);
     background: var(--bubble-bg); border-radius: 50%; width: 24px; height: 24px;
@@ -84,7 +80,6 @@
     100% { opacity: 0; transform: translate(-50%, -10px) scale(0.8); }
 }
 
-/* חלונית מידע (Player Info Card) */
 .player-info-card {
     position: absolute; display: flex; flex-direction: column; align-items: center !important; gap: 6px;
     z-index: 100; pointer-events: auto; animation: fadeIn 0.15s ease-out forwards;
@@ -137,9 +132,6 @@
     color: var(--info-text); text-align: center; line-height: 1.4 !important; direction: rtl; width: 100%; margin: auto 0;
 }
 
-/* =========================================
-   Hint Box (תיבת רמז)
-========================================= */
 .player-info-card .hint-part {
     display: flex;
     align-items: center;
@@ -183,7 +175,6 @@
 .player-info-card .option-item:nth-child(3) { background-color: #22c55e; }
 .player-info-card .option-item:nth-child(4) { background-color: #eab308; }
 
-/* תיבת הודעות (Message Box) */
 .player-info-card .message-box-part {
     display: flex; gap: 8px; margin-top: 8px; padding-top: 12px;
     border-top: 1px solid rgba(150, 150, 150, 0.3);

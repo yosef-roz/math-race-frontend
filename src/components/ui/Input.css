@@ -1,3 +1,5 @@
+/* Input.css */
+
 input {
     width: 100%;
     padding: 14px 16px;
@@ -8,30 +10,21 @@ input {
     border: 2px solid var(--border);
     border-radius: 12px;
     box-sizing: border-box;
-
-    /* מסיר את המסגרת הכחולה הדיפולטית של הדפדפן */
     outline: none;
-
-    /* מעבר חלק כשהמשתמש לוחץ על השדה */
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* מצב פוקוס - כשהמשתמש לוחץ על השדה כדי להקליד */
 input:focus {
-    /* נשתמש בצבע הטקסט הכהה יותר כדי להדגיש שהשדה פעיל */
     border-color: var(--text-h);
-    /* הילה עדינה שנותנת תחושה של עומק */
     box-shadow: 0 0 0 3px var(--border);
 }
 
-/* עיצוב לטקסט הרמז (למשל המילה "Email" לפני שמקלידים) */
 input::placeholder {
     color: var(--text);
     opacity: 0.6;
     font-weight: 400;
 }
 
-/* מצב מכובה או לקריאה בלבד למקרה שתצטרך בעתיד */
 input:disabled,
 input[readonly] {
     background-color: var(--border);

@@ -84,7 +84,6 @@ function ProfileModal({ onClose, user: initialUser, onLogout}) {
                 <hr className="profile-divider"/>
 
                 <div className="profile-actions" style={{ justifyContent: 'center' }}>
-                    {/* שינינו את הפעולה ל-fetchUserData ואת הטקסט ל-Try Again */}
                     <Button onClick={fetchUserData} style={{ width: '100%' }}>
                         Try Again
                     </Button>

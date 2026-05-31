@@ -3,7 +3,7 @@ import { FaGear, FaRightFromBracket, FaShareNodes, FaXmark } from "react-icons/f
 import { memo, useState } from "react";
 import { FaCheck, FaCopy, FaUserClock } from "react-icons/fa";
 import { AlertModal, ALERT_TYPES } from "../ui/AlertModal.jsx";
-import myLogo from "../../assets/logo.png";
+import myLogo from "../../../public/logo.png";
 
 import './RaceLobby.css';
 import { QRCode } from 'react-qrcode-logo';
@@ -124,7 +124,6 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
         }
     };
 
-    // מטפל בלחיצה על כפתור "Copy" (מעתיק רק את קוד החדר)
     const handleCopyCodeClick = async () => {
         const success = await performCopy(raceState.roomCode);
         if (success) {
@@ -133,7 +132,6 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
         }
     };
 
-    // מטפל בלחיצה על כפתור "Share"
     const handleShareClick = async () => {
         const shareData = {
             title: '🏎️ Join the Math Race!',
@@ -141,16 +139,12 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
             url: inviteLink
         };
 
-        // במקרה שאין תמיכה בשיתוף טבעי - זה מה שיועתק. מעתיק *רק* את הקישור.
         const fallbackText = inviteLink;
 
-        // מנסה לשתף באופן טבעי (עובד רק ב-HTTPS/Localhost)
         if (navigator.share && window.isSecureContext) {
             try {
                 await navigator.share(shareData);
             } catch (error) {
-                // אם המשתמש סגר את תפריט השיתוף של הטלפון, מתעלמים
-                // אם זו שגיאה אחרת, מעתיקים את הקישור ללוח
                 if (error.name !== 'AbortError') {
                     const success = await performCopy(fallbackText);
                     if (success) {
@@ -160,7 +154,6 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
                 }
             }
         } else {
-            // אם אין תמיכה בשיתוף בכלל, מעתיקים את הקישור ללוח
             const success = await performCopy(fallbackText);
             if (success) {
                 setShareCopySuccess(true);
@@ -178,13 +171,6 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
     };
 
     const handleConfirmAction = () => {
-        if (confirmActionType === 'close') {
-            console.log("Closing race...");
-            // navigate('/');
-        } else if (confirmActionType === 'leave') {
-            console.log("Leaving race...");
-            // navigate('/');
-        }
         setIsConfirmModalOpen(false);
     };
 
@@ -219,7 +205,6 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
                 )}
             </aside>
 
-            {/* ================= CENTER (Players Arena) ================= */}
             <main className="lobby-center-arena">
                 <div className="arena-header">
                     <h2>Players Joined <span className="player-count-badge">{raceState.players.length}</span></h2>
@@ -246,10 +231,8 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
                 )}
             </main>
 
-            {/* ================= RIGHT SIDE (Controls & Invite) ================= */}
             <aside className="lobby-sidebar right-sidebar">
 
-                {/* Top Controls */}
                 <header className="controls-header">
                     {isHost && isPrivateRoom && (
                         <div className="dropdown-wrapper">
@@ -316,7 +299,6 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
                     </div>
                 </header>
 
-                {/* Invite Box (Dashed Border) */}
                 <div className="invite-dashed-box">
                     <p className="invite-title">Invite Players</p>
                     <h2 className="massive-code">{raceState.roomCode}</h2>
@@ -329,14 +311,14 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
                             logoWidth={45}
                             logoHeight={22}
                             logoOpacity={1}
-                            removeQrCodeBehindLogo={true} /* מוחק את הפיקסלים שמתחת ללוגו למראה נקי */
-                            logoPadding={4} /* מוסיף מסגרת לבנה עדינה מסביב ללוגו */
+                            removeQrCodeBehindLogo={true}
+                            logoPadding={4}
                             qrStyle="squares"
-                            ecLevel="M" /* הורדנו מ-H ל-M: הברקוד יהיה הרבה פחות צפוף! */
-                            eyeRadius={8} /* מעגל את הפינות של 3 הריבועים הגדולים (העיניים) */
+                            ecLevel="M"
+                            eyeRadius={8}
                             quietZone={10}
                             bgColor="#FFFFFF"
-                            fgColor="#1e293b" /* צבע כחול-אפור עמוק (Slate 800) במקום שחור חזק */
+                            fgColor="#1e293b"
                         />
                     </div>
 
@@ -369,7 +351,6 @@ function RaceLobby({ raceState, onStartRace, isHost }) {
 
             </aside>
 
-            {/* ================= CONFIRMATION MODAL ================= */}
             {isConfirmModalOpen && (
                 <AlertModal
                     type={ALERT_TYPES.ERROR}

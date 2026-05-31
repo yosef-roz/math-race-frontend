@@ -3,11 +3,10 @@
 .race-messages-wrapper {
     position: absolute;
     top: 100%;
-    left: 85px; /* ממוקם מימין לכפתור ההגדרות */
+    left: 85px;
     z-index: 9999;
 }
 
-/* לשונית חצי עיגול - זהה לחלוטין להגדרות */
 .messages-tab-btn {
     all: unset;
     box-sizing: border-box;
@@ -45,11 +44,10 @@
     transform: scale(1.1);
 }
 
-/* באדג' (נקודה אדומה) של הודעות חדשות */
 .unread-badge {
     position: absolute;
-    top: -6px; /* קצת יותר גבוה */
-    right: -2px; /* בולט יותר ימינה */
+    top: -6px;
+    right: -2px;
     background: var(--red);
     color: white;
     font-size: 0.75rem;
@@ -59,11 +57,11 @@
     padding: 2px 6px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.4);
     animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 99999; /* מונע ממרכיבים אחרים להסתיר אותו */
+    z-index: 99999;
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1; /* מוודא שהטקסט יושב בדיוק באמצע */
+    line-height: 1;
 }
 
 @keyframes popIn {
@@ -71,7 +69,6 @@
     100% { transform: scale(1); }
 }
 
-/* הפאנל של ההודעות */
 .messages-dropdown-panel {
     position: absolute;
     top: 40px;
@@ -85,7 +82,7 @@
     border-radius: 12px;
     box-shadow: var(--shadow);
     padding: 16px;
-    direction: rtl; /* יישור לימין לעברית */
+    direction: rtl;
     animation: slideDownSettings 0.2s ease-out;
     z-index: 99999;
 }
@@ -109,7 +106,6 @@
     padding-left: 4px;
 }
 
-/* פס גלילה מותאם */
 .messages-list::-webkit-scrollbar { width: 6px; }
 .messages-list::-webkit-scrollbar-track { background: var(--code-bg); border-radius: 4px; }
 .messages-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
@@ -122,7 +118,6 @@
     font-style: italic;
 }
 
-/* הודעה בודדת */
 .message-item {
     background: var(--code-bg);
     border: 1px solid var(--border);

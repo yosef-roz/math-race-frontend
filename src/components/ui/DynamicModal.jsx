@@ -24,7 +24,6 @@ function DynamicModal({ config, isProcessing }) {
                     {config.message}
                 </p>
 
-                {/* רינדור כפתורים אם קיימים */}
                 {config.buttons && config.buttons.length > 0 && (
                     <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
                         {config.buttons.map((btn, index) => (

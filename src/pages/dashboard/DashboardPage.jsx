@@ -1,7 +1,6 @@
 import Card from "../../components/ui/Card.jsx";
 import Button from "../../components/ui/Button.jsx";
 import { useNavigate } from "react-router-dom";
-// שים לב לייבוא של ה-CSS Module החדש
 import styles from './Dashboard.module.css';
 
 function DashboardPage() {
@@ -13,8 +12,6 @@ function DashboardPage() {
 
     return (
         <div className={styles.dashboardContainer}>
-
-            {/* כרטיס יצירת מירוץ: משתמש בעיצוב הכחול הגלובלי + גודל הדשבורד */}
             <Card className={`game-card theme-blue ${styles.dashboardCard}`}>
                 <h2>Create a Race</h2>
                 <p>
@@ -24,7 +21,6 @@ function DashboardPage() {
                 <Button name={"create"} onClick={handleSubmit}>Create Race</Button>
             </Card>
 
-            {/* כרטיס הצטרפות: משתמש בעיצוב הירוק הגלובלי + גודל הדשבורד */}
             <Card className={`game-card theme-green ${styles.dashboardCard}`}>
                 <h2>Join the Race</h2>
                 <p>

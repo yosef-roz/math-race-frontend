@@ -60,7 +60,6 @@ function GameHistoryPage() {
         });
     };
 
-    // 2. עדכון הפונקציה שתחזיר את המחלקות מתוך אובייקט ה-styles
     const getRankBadgeClass = (rank) => {
         if (rank === 1) return styles.rankGold;
         if (rank === 2) return styles.rankSilver;
@@ -80,7 +79,6 @@ function GameHistoryPage() {
                 {historyList.map((game) => (
                     <div
                         key={game.id}
-                        // שילוב של מחלקות דינמיות
                         className={`${styles.historyCard} ${expandedGameId === game.id ? styles.expanded : ''}`}
                         onClick={() => handleGameClick(game.id)}
                     >

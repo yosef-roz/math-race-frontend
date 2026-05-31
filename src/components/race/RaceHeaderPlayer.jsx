@@ -56,7 +56,7 @@ const RaceHeaderPlayer = ({ raceState, localPlayer, localTimeLeft, onChangeNickn
 
                 <div className="header-collapse-wrapper">
                     <div className="header-top-row">
-                        {/* צד ימין */}
+
                         <div className="header-info-group">
                             <div className="room-details">
                                 <div className="room-name-and-code">
@@ -88,7 +88,6 @@ const RaceHeaderPlayer = ({ raceState, localPlayer, localTimeLeft, onChangeNickn
                             </div>
                         </div>
 
-                        {/* אמצע */}
                         <div className="header-timer-area">
                             <div className="timer-text">
                                 <span>זמן נותר:</span>
@@ -103,7 +102,6 @@ const RaceHeaderPlayer = ({ raceState, localPlayer, localTimeLeft, onChangeNickn
                             <span className="target-score">יעד נקודות: {raceState.targetScore}</span>
                         </div>
 
-                        {/* צד שמאל */}
                         <div className="header-info-group player-self-group">
                             <div className="player-stats-wrapper">
                                 <div className="score-row">
@@ -131,10 +129,8 @@ const RaceHeaderPlayer = ({ raceState, localPlayer, localTimeLeft, onChangeNickn
                     </div>
                 </div>
 
-                {/* אזור הלשוניות (כפתורי חצי עיגול) */}
                 <div className="header-bottom-tabs-container">
 
-                    {/* צד שמאל - ההגדרות וההודעות */}
                     <div className="tabs-side tabs-left">
                         <RaceSettingsPlayer
                             currentNickname={localPlayer?.nickname}
@@ -144,7 +140,6 @@ const RaceHeaderPlayer = ({ raceState, localPlayer, localTimeLeft, onChangeNickn
                         <RaceMessages messages={messages} />
                     </div>
 
-                    {/* אמצע - כפתור פתיחה/סגירה מרכזי */}
                     <button
                         className="header-toggle-btn"
                         onClick={() => setIsOpen(!isOpen)}
@@ -153,7 +148,6 @@ const RaceHeaderPlayer = ({ raceState, localPlayer, localTimeLeft, onChangeNickn
                         {isOpen ? '▲' : '▼'}
                     </button>
 
-                    {/* צד ימין - תופס מקום ריק לאיזון האמצע */}
                     <div className="tabs-side tabs-right"></div>
 
                 </div>

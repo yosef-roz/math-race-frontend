@@ -17,15 +17,12 @@ function ProfilePage() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // סטייטים לעריכת שם המשתמש
     const [newUsername, setNewUsername] = useState("");
     const [isUpdatingName, setIsUpdatingName] = useState(false);
 
-    // סטייטים למחיקת חשבון
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isRequestingDelete, setIsRequestingDelete] = useState(false);
 
-    // סטייטים להודעות - ErrorToast ולהודעות הצלחה
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
 
@@ -54,27 +51,29 @@ function ProfilePage() {
         fetchUserData();
     }, [navigate]);
 
-    // ולידציה שתואמת להגבלות ה-DTO בשרת (UpdateUsernameRequest)
     const validateUsername = (name) => {
-        if (!name || name.trim().length === 0) {
-            return "Username cannot be empty";
+        if (!name || name.trim() === "") {
+            return "Username is required";
         }
         if (name.length < 3 || name.length > 15) {
             return "Username must be between 3 and 15 characters";
         }
-        if (/\s/.test(name)) {
-            return "Username cannot contain spaces";
+        const usernameRegex = /^(?=.*[a-zA-Z])\S+$/;
+        if (!usernameRegex.test(name)) {
+            return "Username must contain at least one letter and no spaces";
         }
         return null;
     };
 
-    const handleSaveUsername = async () => {
+    const handleSaveUsername = async (e) => {
+        if (e) e.preventDefault();
+
         setErrorMessage("");
         setSuccessMessage("");
 
         const validationError = validateUsername(newUsername);
         if (validationError) {
-            setErrorMessage(validationError); // מקפיץ את השגיאה ב-Toast
+            setErrorMessage(validationError);
             return;
         }
 
@@ -89,7 +88,6 @@ function ProfilePage() {
                 setUser({ ...user, username: newUsername });
                 setSuccessMessage("Username updated successfully!");
 
-                // העלמת הודעת ההצלחה אחרי כמה שניות
                 setTimeout(() => setSuccessMessage(""), 5000);
             } else {
                 setErrorMessage(getErrorMessage(response.errorCode));
@@ -138,9 +136,7 @@ function ProfilePage() {
     const hasNameChanged = newUsername !== user.username;
 
     return (
-        // התיקון כאן: שימוש ב-Fragment במקום ב-div.page-wrapper
         <>
-            {/* הקפצת שגיאות באמצעות הקומפוננטה שלך */}
             <ErrorToast
                 message={errorMessage}
                 onClose={() => setErrorMessage("")}
@@ -151,7 +147,7 @@ function ProfilePage() {
                     {user.username ? user.username.substring(0, 1).toUpperCase() : '👤'}
                 </div>
 
-                <div className="profile-edit-section">
+                <form className="profile-edit-section" onSubmit={handleSaveUsername}>
                     <Input
                         name="username"
                         type="text"
@@ -160,22 +156,26 @@ function ProfilePage() {
                         disabled={isUpdatingName || isRequestingDelete}
                         placeholder="Enter new username"
                         style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '18px' }}
+                        required
+                        minLength={3}
+                        maxLength={15}
+                        pattern={"^(?=.*[a-zA-Z])\\S+$"}
+                        title={"Username must contain at least one letter and no spaces"}
                     />
 
                     {hasNameChanged && (
                         <Button
+                            type="submit"
                             className="btn-save-username"
-                            onClick={handleSaveUsername}
                             disabled={isUpdatingName}
                         >
                             {isUpdatingName ? "Saving..." : "Save Changes"}
                         </Button>
                     )}
-                </div>
+                </form>
 
                 <p className="profile-display-email">{user.email}</p>
 
-                {/* הצגת הודעת הצלחה אינליין (ללא Toast) */}
                 {successMessage && (
                     <div className="profile-feedback-message success">
                         {successMessage}

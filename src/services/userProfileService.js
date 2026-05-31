@@ -25,6 +25,14 @@ const updateUsername = async (newUsername) => {
     return response.data;
 };
 
+const changePassword = async (data) => {
+    const response = await apiWithToken.post('/users/me/change-password', {
+        newPassword: data.newPassword,
+        oldPassword: data.oldPassword,
+    });
+    return response.data;
+};
+
 const requestAccountDeletion = async () => {
     const response = await apiWithToken.post('/users/me/delete-request');
     return response.data;
@@ -43,6 +51,7 @@ export {
     myHistory,
     myFullHistory,
     updateUsername,
+    changePassword,
     requestAccountDeletion,
     confirmAccountDeletion
 };

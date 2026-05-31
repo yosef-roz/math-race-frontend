@@ -4,12 +4,10 @@ import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 import Card from "../../components/ui/Card.jsx";
 import { ALERT_TYPES, AlertModal } from "../../components/ui/AlertModal.jsx";
-
 import { ClipLoader } from "react-spinners";
-
 import { joinRace } from "../../services/raceService.js";
 import { useWebSocket } from "../../services/webSocket/WebSocketContext.js";
-import logo from "../../assets/logo.png";
+import logo from "../../../public/logo.png";
 import './RaceForms.css';
 
 function JoinRacePage() {
@@ -35,12 +33,11 @@ function JoinRacePage() {
                 alert.onClose();
             } else {
                 setAlert(null);
-                navigate("/");
             }
         }, 5000);
 
         return () => clearTimeout(timer);
-    }, [alert, navigate])
+    }, [alert]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -50,10 +47,50 @@ function JoinRacePage() {
         }));
     };
 
+    const validateForm = () => {
+        const { nickname } = formData;
+
+        if (nickname.length > 15) {
+            setAlert({
+                type: ALERT_TYPES.ERROR,
+                title: "Invalid Nickname",
+                message: "Nickname cannot exceed 15 characters"
+            });
+            return false;
+        }
+
+        const atLeastThreeCharsRegex = /^(?:.*\S){3}.*$/;
+        if (!atLeastThreeCharsRegex.test(nickname)) {
+            setAlert({
+                type: ALERT_TYPES.ERROR,
+                title: "Invalid Nickname",
+                message: "Nickname must contain at least 3 actual characters"
+            });
+            return false;
+        }
+
+        const noEdgeSpacesRegex = /^\S.*\S$/;
+        if (!noEdgeSpacesRegex.test(nickname)) {
+            setAlert({
+                type: ALERT_TYPES.ERROR,
+                title: "Invalid Nickname",
+                message: "Nickname must not start or end with a space"
+            });
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (isSubmitting) return;
+
+        if (!validateForm()) {
+            return;
+        }
+
         setIsSubmitting(true);
 
         clearError();
@@ -78,7 +115,6 @@ function JoinRacePage() {
                 title: "Error",
                 message: errorMessage
             });
-            setFormData({ roomCode: codeFromUrl, nickname: "" });
         } finally {
             setIsSubmitting(false);
         }
@@ -103,7 +139,9 @@ function JoinRacePage() {
                     title: "Invalid Request",
                     message: response.message
                 });
-                setFormData({ roomCode: codeFromUrl, nickname: "" });
+                if (response.errorCode !== 1400) {
+                    setFormData(prev => ({ ...prev, roomCode: codeFromUrl }));
+                }
                 break;
             default:
                 setAlert({
@@ -118,7 +156,6 @@ function JoinRacePage() {
         <div className="page-wrapper">
             <Card className="game-card-styled theme-yellow">
                 <div >
-
                     <img
                         src={logo}
                         alt="Math Race Logo"
@@ -148,6 +185,11 @@ function JoinRacePage() {
                         value={formData.nickname}
                         onChange={handleChange}
                         autoFocus={isCodeLocked}
+                        required
+                        minLength={3}
+                        maxLength={15}
+                        pattern={"^[^\\s].*[^\\s]$"}
+                        title="Nickname must be 3-15 characters and cannot start or end with a space"
                     />
 
                     <Button  type={"submit"} disabled={isSubmitting}>

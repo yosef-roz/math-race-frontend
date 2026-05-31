@@ -94,7 +94,6 @@ const RaceHeaderHost = ({ raceState, livePlayers, localTimeLeft, onPlayerClick, 
             <div className={`header-collapse-wrapper ${isPlayersMenuOpen ? 'dropdown-open' : ''}`}>
                 <div className="header-top-row">
 
-                    {/* צד ימין (פרטי חדר ומנהל) */}
                     <div className="header-info-group">
                         <div className="room-details">
                             <div className="room-name-and-code">
@@ -126,7 +125,6 @@ const RaceHeaderHost = ({ raceState, livePlayers, localTimeLeft, onPlayerClick, 
                         </div>
                     </div>
 
-                    {/* אמצע (טיימר) */}
                     <div className="header-timer-area">
                         <div className="timer-text">
                             <span>זמן נותר:</span>
@@ -141,7 +139,6 @@ const RaceHeaderHost = ({ raceState, livePlayers, localTimeLeft, onPlayerClick, 
                         <span className="target-score">יעד נקודות: {raceState.targetScore}</span>
                     </div>
 
-                    {/* צד שמאל: רשימת השחקנים נשארה, הכפתורים הועברו להגדרות */}
                     <div className="header-info-group host-left-group">
                         <div className="header-actions" ref={dropdownRef}>
                             <button
@@ -196,9 +193,7 @@ const RaceHeaderHost = ({ raceState, livePlayers, localTimeLeft, onPlayerClick, 
                 </div>
             </div>
 
-            {/* אזור הלשוניות (כפתורי חצי עיגול) */}
             <div className="header-bottom-tabs-container">
-                {/* צד שמאל - ההגדרות של המנהל */}
                 <div className="tabs-side tabs-left">
                     <RaceSettingsHost
                         currentNickname={raceState.host?.nickname}
@@ -212,7 +207,6 @@ const RaceHeaderHost = ({ raceState, livePlayers, localTimeLeft, onPlayerClick, 
                     />
                 </div>
 
-                {/* אמצע - כפתור פתיחה/סגירה מרכזי */}
                 <button
                     className="header-toggle-btn"
                     onClick={() => setIsOpen(!isOpen)}
@@ -221,7 +215,6 @@ const RaceHeaderHost = ({ raceState, livePlayers, localTimeLeft, onPlayerClick, 
                     {isOpen ? '▲' : '▼'}
                 </button>
 
-                {/* צד ימין - מקום ריק לאיזון האמצע */}
                 <div className="tabs-side tabs-right"></div>
             </div>
         </div>

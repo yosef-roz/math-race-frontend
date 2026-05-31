@@ -1,4 +1,4 @@
-/*index.css*/
+/* index.css */
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
@@ -181,28 +181,24 @@ code {
   color: #fff;
 }
 
-/* Theme Blue */
 .theme-blue.game-card { border-color: var(--blue); box-shadow: 0 10px 0 var(--blue); }
 .theme-blue h2 { color: var(--blue); }
 .theme-blue button { background-color: var(--blue); box-shadow: 0 6px 0 #1d4ed8; }
 .theme-blue button:hover { transform: translateY(-4px); box-shadow: 0 10px 0 #1d4ed8; }
 .theme-blue button:active { transform: translateY(6px); box-shadow: 0 0px 0 #1d4ed8; }
 
-/* Theme Green */
 .theme-green.game-card { border-color: var(--green); box-shadow: 0 10px 0 var(--green); }
 .theme-green h2 { color: var(--green); }
 .theme-green button { background-color: var(--green); box-shadow: 0 6px 0 #15803d; }
 .theme-green button:hover { transform: translateY(-4px); box-shadow: 0 10px 0 #15803d; }
 .theme-green button:active { transform: translateY(6px); box-shadow: 0 0px 0 #15803d; }
 
-/* Theme Yellow */
 .theme-yellow.game-card { border-color: var(--yellow); box-shadow: 0 10px 0 var(--yellow); }
 .theme-yellow h2 { color: var(--yellow); }
 .theme-yellow button { background-color: var(--yellow); box-shadow: 0 6px 0 #d97706; }
 .theme-yellow button:hover { transform: translateY(-4px); box-shadow: 0 10px 0 #d97706; }
 .theme-yellow button:active { transform: translateY(6px); box-shadow: 0 0px 0 #d97706; }
 
-/* Theme Red */
 .theme-red.game-card { border-color: var(--red); box-shadow: 0 10px 0 var(--red); }
 .theme-red h2 { color: var(--red); }
 .theme-red button { background-color: var(--red); box-shadow: 0 6px 0 #b91c1c; }

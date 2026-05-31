@@ -55,8 +55,9 @@ function App() {
                     </Route>
 
                     <Route element={<MainLayout/>}>
-                        <Route path={"/"} element={<DashboardPage />}/>
-                        <Route path={"/public-races"} element={<PublicRacesPage />}/>
+                        <Route index element={<DashboardPage />}/>
+                        <Route path="home" element={<Navigate to="/" replace />}/>
+                        <Route path="public-races" element={<PublicRacesPage />}/>
                     </Route>
 
                     <Route element={<CookieProtectedRoute/>}>

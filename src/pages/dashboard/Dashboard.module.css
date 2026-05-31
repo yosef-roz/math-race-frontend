@@ -1,4 +1,4 @@
-/* --- Dashboard.module.css --- */
+/* Dashboard.module.css */
 
 .dashboardContainer {
     display: flex;
@@ -15,26 +15,21 @@
 .dashboardCard {
     flex: 1;
     max-width: 550px !important;
-    /* הקטנו את המינימום כדי שלא ידחוף מסכים קטנים */
     min-width: 280px;
     padding: 40px !important;
 }
 
-/* --- התאמה מושלמת למובייל --- */
 @media (max-width: 768px) {
     .dashboardContainer {
         flex-direction: column;
         align-items: center;
-        /* פחות ריווח בצדדים במובייל */
         padding: 15px;
     }
 
     .dashboardCard {
-        /* כופה עליהן לא לחרוג מרוחב המסך */
         width: 100% !important;
         max-width: 100% !important;
         min-width: 0 !important;
-        /* מקטין את הריווח הפנימי במובייל כדי לחסוך מקום */
         padding: 24px !important;
     }
 }

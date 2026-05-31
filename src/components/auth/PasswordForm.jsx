@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import {AlertModal, ALERT_TYPES} from "../ui/AlertModal";
-import logo from "../../assets/logo.png";
+import logo from "../../../public/logo.png";
 
 function PasswordForm({header, onSubmit, buttonText = "Save Password"}) {
     const [formData, setFormData] = useState({password: "", confirmPassword: ""});

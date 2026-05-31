@@ -28,14 +28,6 @@ const resetPassword = async (newPassword,token) => {
     return response.data;
 };
 
-const changePassword = async (data) => {
-    const response = await apiWithToken.post('/auth/change-password', {
-        newPassword: data.newPassword,
-        oldPassword: data.oldPassword,
-    });
-    return response.data;
-};
-
 const createGuestToken = async () => {
     const response = await apiWithOutToken.post('/auth/create-guestToken');
     return response.data;
@@ -47,6 +39,5 @@ export {
     forgotPassword,
     resetPassword,
     verifyAccount,
-    changePassword,
     createGuestToken,
 };

@@ -40,7 +40,6 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
     if (isAtStart) shiftClass = "shift-right";
     if (isAtEnd) shiftClass = "shift-left";
 
-    // לוגיקת בועות אירועים
     useEffect(() => {
         if (player.bubbleEvent) {
             setActiveBubble(player.bubbleEvent);
@@ -49,7 +48,6 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
         }
     }, [player.bubbleEvent]);
 
-    // ניקוי אינפוט כשמתקבל טריגר מהשרת/אבא
     useEffect(() => {
         if (player.clearInputTrigger) {
             setMessageInput('');
@@ -57,7 +55,6 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
         }
     }, [player.clearInputTrigger]);
 
-    // ניהול טיימר מקומי לסנכרון עם השרת
     const [localRemainingState, setLocalRemainingState] = useState(0);
     const localRemainingRef = useRef(0);
 
@@ -125,14 +122,14 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
     let expression = "";
     let options = [];
     let timeLimit = 1;
-    let hint = null; // משתנה לרמז
+    let hint = null;
 
     if (activeTask) {
         expression = activeTask.expression;
         timeLimit = activeTask.timeLimitMillis || 1;
         if (player.currentQuestion) {
             options = activeTask.options || [];
-            hint = player.currentQuestion.hint; // שליפת הרמז אם קיים
+            hint = player.currentQuestion.hint;
         } else if (player.currentJunction) {
             options = [activeTask.offer1, activeTask.offer2].filter(Boolean);
         }
@@ -145,11 +142,21 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
     else if (showInfoCard) dynamicZIndex = 150;
     else if (activeBubble) dynamicZIndex = 50 + (activeBubble.id % 10000000);
 
+    const isMessageValid = () => {
+        const trimmedMessage = messageInput.trim();
+        if (!trimmedMessage) return false;
+        if (trimmedMessage.length > 500) return false;
+        return true;
+    };
+
     const handleSendMessage = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (messageInput.trim() && onSendMessageToPlayer) {
-            onSendMessageToPlayer(player.id, messageInput);
+
+        const trimmedMessage = messageInput.trim();
+
+        if (isMessageValid() && onSendMessageToPlayer) {
+            onSendMessageToPlayer(player.id, trimmedMessage);
         }
     };
 
@@ -182,7 +189,6 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
                                         <div className="question-text" dir="rtl">{expression}</div>
                                     </div>
 
-                                    {/* רינדור תיבת הרמז במידה והתקבל */}
                                     {hint && (
                                         <div className="hint-part" dir="rtl">
                                             <FaLightbulb className="hint-icon" />
@@ -200,7 +206,7 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
                                 </>
                             )}
 
-                            <div className="message-box-part" dir="rtl">
+                            <form className="message-box-part" dir="rtl" onSubmit={handleSendMessage}>
                                 <input
                                     type="text"
                                     className="message-input"
@@ -209,16 +215,23 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
                                     onChange={(e) => setMessageInput(e.target.value)}
                                     onFocus={() => setIsInputFocused(true)}
                                     onBlur={() => setTimeout(() => setIsInputFocused(false), 150)}
-                                    onKeyDown={(e) => { if (e.key === 'Enter') handleSendMessage(e); }}
+                                    required
+                                    maxLength={500}
+                                    pattern=".*\S+.*"
+                                    title="אנא הקלד הודעה חוקית (לא רק רווחים)"
                                 />
                                 <button
+                                    type="submit"
                                     className="message-send-btn"
-                                    style={{ backgroundColor: carColor }}
-                                    onClick={handleSendMessage}
+                                    style={{
+                                        backgroundColor: isMessageValid() ? carColor : '#ccc',
+                                        cursor: isMessageValid() ? 'pointer' : 'not-allowed'
+                                    }}
+                                    disabled={!isMessageValid()}
                                 >
                                     שלח
                                 </button>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

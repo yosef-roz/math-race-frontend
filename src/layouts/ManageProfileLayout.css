@@ -1,3 +1,5 @@
+/* ManageProfileLayout.css */
+
 .manage-profile-layout {
     display: flex;
     gap: 32px;
@@ -103,7 +105,7 @@
 
 .profile-content-area::-webkit-scrollbar-track {
     background: transparent;
-    margin: 16px 0; /* מרחיק קצת את הפס מהקצוות העגולים */
+    margin: 16px 0;
 }
 
 .profile-content-area::-webkit-scrollbar-thumb {

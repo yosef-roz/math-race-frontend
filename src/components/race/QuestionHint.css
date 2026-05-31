@@ -8,7 +8,6 @@
     padding: 12px 20px;
     box-sizing: border-box;
 
-    /* הגדרות לשמירה על שורה אחת */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -18,13 +17,12 @@
     box-shadow: 0 4px 0 var(--yellow);
     animation: slideUpFade 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     direction: rtl;
-    flex-shrink: 0; /* מונע מהרמז להתכווץ בעצמו */
+    flex-shrink: 0;
 }
 
-/* כשאנחנו בתוך מסך צר, הופכים לטור */
 @media (max-width: 480px) {
     .hint-card-container {
-        flex-direction: row; /* במקום column, נשארים ב-row */
+        flex-direction: row;
         align-items: center;
         gap: 10px;
         padding: 10px 15px;
@@ -41,8 +39,6 @@
     height: 36px;
     border-radius: 50%;
     font-size: 1.2rem;
-
-    /* מונע מהאייקון להימעך ולהפוך לאליפסה כשאין מקום */
     flex-shrink: 0;
 }
 
@@ -50,8 +46,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    /* נותן לטקסט לתפוס את שאר השטח הפנוי באותה שורה */
     flex: 1;
     text-align: right;
 }
@@ -71,7 +65,6 @@
     line-height: 1.4;
 }
 
-/* אנימציית קפיצה קטנה בעת הופעת הרמז */
 @keyframes slideUpFade {
     0% {
         opacity: 0;

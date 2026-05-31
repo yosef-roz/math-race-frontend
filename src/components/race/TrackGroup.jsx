@@ -37,7 +37,6 @@ function TrackGroup({ trackType, players, targetScore, highlightedPlayerId, onSe
                 const key = `${prev.roadIndex}-${prev.laneIndex}`;
                 const occupantScore = laneOccupancy[key];
 
-                // אם פנוי או שיש מרחק ביטחון מהרכב ששובץ לפניו
                 if (occupantScore === undefined || (occupantScore - player.currentScore) >= overlapScoreBuffer) {
                     assignedRoad = prev.roadIndex;
                     assignedLane = prev.laneIndex;
@@ -107,7 +106,6 @@ function TrackGroup({ trackType, players, targetScore, highlightedPlayerId, onSe
 
                 <div className="finish-line"></div>
 
-                {/* רינדור הרכבים באמצעות הקומפוננטה החדשה */}
                 {renderData.positionedPlayers.map(player => (
                     <CarPlayer
                         key={player.id}

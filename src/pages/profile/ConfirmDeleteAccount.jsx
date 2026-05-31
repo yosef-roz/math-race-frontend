@@ -30,7 +30,6 @@ function ConfirmDeleteAccount() {
 
     const handleConfirmDeletion = async () => {
         setStatus('loading');
-        // עדכון הטקסט כך שישקף תהליך אימות ובדיקה
         setMessage('Verifying and processing your request...');
         setErrorMessage('');
 
@@ -73,7 +72,6 @@ function ConfirmDeleteAccount() {
     return (
         <div className="page-wrapper">
 
-            {/* הקפצת הודעות השגיאה בנוסף להצגה בכרטיסייה */}
             <ErrorToast
                 message={errorMessage}
                 onClose={() => setErrorMessage("")}
@@ -82,7 +80,6 @@ function ConfirmDeleteAccount() {
             <Card className="theme-red">
                 <h2>Delete Account</h2>
 
-                {/* מצב המתנה לאישור המשתמש */}
                 {status === 'idle' && (
                     <div style={{ marginTop: '20px' }}>
                         <p style={{ fontWeight: 'bold', color: 'var(--red)', marginBottom: '15px' }}>
@@ -103,7 +100,6 @@ function ConfirmDeleteAccount() {
                     </div>
                 )}
 
-                {/* מצב טעינה - מציג את הלודר והטקסט שהבקשה באימות */}
                 {status === 'loading' && (
                     <div style={{ margin: '20px 0' }}>
                         <ClipLoader color="var(--text-h)" />
@@ -111,7 +107,6 @@ function ConfirmDeleteAccount() {
                     </div>
                 )}
 
-                {/* מצב שגיאה - השגיאה נכתבת במקום, עם כפתור חזרה לדף הבית */}
                 {status === 'error' && (
                     <div style={{ marginTop: '20px' }}>
                         <p style={{ fontWeight: 'bold', color: 'var(--red)', marginBottom: '20px' }}>
@@ -123,7 +118,6 @@ function ConfirmDeleteAccount() {
                     </div>
                 )}
 
-                {/* מצב הצלחה */}
                 {status === 'success' && (
                     <p style={{
                         marginTop: '20px',

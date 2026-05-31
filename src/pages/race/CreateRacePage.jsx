@@ -8,9 +8,9 @@ import Button from "../../components/ui/Button.jsx";
 import { createRace } from "../../services/raceService.js";
 import { ALERT_TYPES, AlertModal } from "../../components/ui/AlertModal.jsx";
 import { ClipLoader } from "react-spinners";
-import logo from "../../assets/logo.png";
+import logo from "../../../public/logo.png";
 import './RaceForms.css';
-import {useWebSocket} from "../../services/webSocket/WebSocketContext.js";
+import { useWebSocket } from "../../services/webSocket/WebSocketContext.js";
 
 const INITIAL_STATE = {
     name: "",
@@ -34,12 +34,11 @@ function CreateRacePage() {
                 alert.onClose();
             } else {
                 setAlert(null);
-                navigate("/");
             }
         }, 5000);
 
         return () => clearTimeout(timer);
-    }, [alert, navigate]);
+    }, [alert]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -49,20 +48,78 @@ function CreateRacePage() {
         }));
     };
 
+    const validateForm = () => {
+        const { name, nickname, targetScore } = formData;
+
+        if (name) {
+            if (name.length > 15) {
+                setAlert({ type: ALERT_TYPES.ERROR, title: "Invalid Input", message: "Name cannot exceed 15 characters" });
+                return false;
+            }
+            if (!/^(?:.*\S){3}.*$/.test(name)) {
+                setAlert({ type: ALERT_TYPES.ERROR, title: "Invalid Input", message: "Name must contain at least 3 actual characters" });
+                return false;
+            }
+            if (!/^\S.*\S$/.test(name)) {
+                setAlert({ type: ALERT_TYPES.ERROR, title: "Invalid Input", message: "Name must not start or end with a space" });
+                return false;
+            }
+        }
+
+        if (nickname) {
+            if (nickname.length > 15) {
+                setAlert({ type: ALERT_TYPES.ERROR, title: "Invalid Input", message: "Nickname cannot exceed 15 characters" });
+                return false;
+            }
+            if (!/^(?:.*\S){3}.*$/.test(nickname)) {
+                setAlert({ type: ALERT_TYPES.ERROR, title: "Invalid Input", message: "Nickname must contain at least 3 actual characters" });
+                return false;
+            }
+            if (!/^\S.*\S$/.test(nickname)) {
+                setAlert({ type: ALERT_TYPES.ERROR, title: "Invalid Input", message: "Nickname must not start or end with a space" });
+                return false;
+            }
+        }
+
+        if (!targetScore) {
+            setAlert({ type: ALERT_TYPES.ERROR, title: "Invalid Input", message: "Target score is required" });
+            return false;
+        } else {
+            const score = Number(targetScore);
+            if (score < 20 || score > 100000) {
+                setAlert({ type: ALERT_TYPES.ERROR, title: "Invalid Input", message: "Target score must be between 20 and 100,000" });
+                return false;
+            }
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (isSubmitting) return;
-        setIsSubmitting(true);
 
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsSubmitting(true);
         clearError();
         clearLastMessage();
 
-        const payload = Object.fromEntries(
-            Object.entries(formData).filter(([key, value]) => value !== "")
-        );
+        const payload = {};
+        for (const [key, value] of Object.entries(formData)) {
+            if (typeof value === 'string') {
+                const trimmed = value.trim();
+                if (trimmed !== "") payload[key] = trimmed;
+            } else {
+                payload[key] = value;
+            }
+        }
 
         try {
+            console.log(payload);
             const response = await createRace(payload);
 
             if (response.success) {
@@ -78,7 +135,6 @@ function CreateRacePage() {
                 title: "Creation Error",
                 message: errorMessage
             });
-            setFormData(INITIAL_STATE);
         } finally {
             setIsSubmitting(false);
         }
@@ -109,7 +165,6 @@ function CreateRacePage() {
                     title: "Invalid Input",
                     message: response.message
                 });
-                setFormData(INITIAL_STATE);
                 break;
             default:
                 setAlert({
@@ -123,33 +178,36 @@ function CreateRacePage() {
     return (
         <div className="page-wrapper">
             <Card className="game-card-styled theme-red">
-                <div >
-
+                <div>
                     <img
                         src={logo}
                         alt="Math Race Logo"
                         className="dashboard-logo"
                     />
-
-                    <h2 >Create Race</h2>
-                    <p >Fill in the details to create a race!</p>
+                    <h2>Create Race</h2>
+                    <p>Fill in the details to create a race!</p>
                 </div>
 
-                <form onSubmit={handleSubmit} >
+                <form onSubmit={handleSubmit}>
                     <Input
                         name={"name"}
                         type={"text"}
                         placeholder={"Name for race"}
                         value={formData.name}
                         onChange={handleChange}
+                        minLength={3}
+                        maxLength={15}
+                        pattern={"^[^\\s].*[^\\s]$"}
+                        title={"Name must be 3-15 characters and cannot start or end with a space"}
                     />
 
                     <Input
                         name={"targetScore"}
                         type={"number"}
-                        min="0"
-                        step="1"
-                        onKeyDown={(e) => ["e", "E", "-", "+"].includes(e.key) && e.preventDefault()}
+                        min={20}
+                        max={100000}
+                        step={1}
+                        onKeyDown={(e) => ["e", "E", "-", "+", "."].includes(e.key) && e.preventDefault()}
                         placeholder={"Target score"}
                         value={formData.targetScore}
                         onChange={handleChange}
@@ -162,6 +220,10 @@ function CreateRacePage() {
                         placeholder={"nickname for race"}
                         value={formData.nickname}
                         onChange={handleChange}
+                        minLength={3}
+                        maxLength={15}
+                        pattern={"^[^\\s].*[^\\s]$"}
+                        title={"Nickname must be 3-15 characters and cannot start or end with a space"}
                     />
 
                     <div className="checkbox-container">
@@ -171,17 +233,16 @@ function CreateRacePage() {
                             type="checkbox"
                             checked={formData.isPrivate}
                             onChange={handleChange}
-                            
                         />
-                        <label htmlFor="isPrivate" >Private Race?</label>
-                        <span >{formData.isPrivate ? "(Only with code)" : "(Public list)"}</span>
+                        <label htmlFor="isPrivate">Private Race?</label>
+                        <span>{formData.isPrivate ? "(Only with code)" : "(Public list)"}</span>
                     </div>
 
-                    <Button  type={"submit"} disabled={isSubmitting}>
+                    <Button type={"submit"} disabled={isSubmitting}>
                         {isSubmitting ? <ClipLoader /> : "Create Race"}
                     </Button>
 
-                    <Button  type={"button"} onClick={() => navigate("/")}>
+                    <Button type={"button"} onClick={() => navigate("/")}>
                         Back to Home
                     </Button>
                 </form>

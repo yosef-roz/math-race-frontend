@@ -1,3 +1,5 @@
+/* StatisticsPage.module.css */
+
 .statisticsContainer {
     width: 100%;
     height: 100%;
@@ -18,9 +20,9 @@
 
 .statsGridContainer {
     width: 100%;
-    display: flex; /* שינינו מ-grid ל-flex */
-    flex-wrap: wrap; /* מאפשר לפריטים לרדת שורה */
-    justify-content: center; /* זה הקסם - תמיד שומר על פריטים במרכז השורה */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 24px;
     padding-top: 20px;
 }
@@ -33,17 +35,15 @@
     padding: 32px 16px;
     border-radius: 20px;
     transition: all 0.2s ease;
-
-    /* הגדרת רוחב גמיש אך יציב */
-    flex: 1 1 250px; /* ינסה להיות 200px, יגדל אם צריך, ויתכווץ */
-    max-width: 280px; /* מונע מהם להימתח יותר מדי אם יש רק פריט אחד בשורה */
+    flex: 1 1 250px;
+    max-width: 280px;
     min-width: 180px;
 
     background-color: transparent;
 }
 
 .statItem:hover {
-    background-color: #f8f9fa; /* אפור בהיר מאוד וניטרלי */
+    background-color: #f8f9fa;
 }
 
 .statValue {
@@ -62,7 +62,6 @@
     text-align: center;
 }
 
-/* צבעים */
 .colorBlue { color: var(--blue); }
 .colorYellow { color: var(--yellow); }
 .colorGreen { color: var(--green); }
@@ -82,7 +81,6 @@
     color: var(--red);
 }
 
-/* רספונסיביות */
 @media (max-width: 600px) {
     .statisticsTitle {
         font-size: 32px;
@@ -93,7 +91,7 @@
     }
 
     .statItem {
-        flex: 1 1 100%; /* במובייל כל אחד יתפוס שורה שלמה וימרכז את עצמו */
+        flex: 1 1 100%;
         max-width: 100%;
     }
 

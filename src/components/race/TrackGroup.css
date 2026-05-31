@@ -1,8 +1,7 @@
-/* =========================================
-   TrackGroup.css - משתני צבע ומבנה הזירה
-========================================= */
+/* TrackGroup.css */
+
+
 :root {
-    /* --- מצב בהיר --- */
     --track-group-border: #cbd5e1;
     --track-side-label-border: #cbd5e1;
     --track-side-label-text: #475569;
@@ -32,7 +31,6 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        /* --- מצב כהה --- */
         --track-group-border: #111;
         --track-side-label-border: #111;
         --track-side-label-text: #fff;
@@ -117,7 +115,6 @@
     box-shadow: -5px 0 10px rgba(0,0,0,0.15);
 }
 
-/* אנימציית אוטוסטרדה */
 .track-AUTOSTRADA .road { overflow: hidden; }
 .track-AUTOSTRADA .road::after {
     content: ''; position: absolute; top: 10px; left: 0; right: 0; bottom: 10px;

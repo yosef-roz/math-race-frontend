@@ -1,8 +1,5 @@
-/* =========================================
-   RaceActiveHost.css
-========================================= */
+/*RaceActiveHost.css*/
 
-/* --- Header & Timer --- */
 .race-header {
     display: flex;
     flex-wrap: wrap;
@@ -57,11 +54,9 @@
     100% { background: rgba(239, 68, 68, 0.15); box-shadow: 0 0 20px var(--red); }
 }
 
-/* --- Race Arena (המעטפת הראשית) --- */
 .race-arena {
     display: flex;
     flex-direction: column;
-    /* שימוש במשתני הרקע והמסגרת מ-TrackGroup למעבר תקין בין בהיר/כהה */
     background: var(--bg, #1a1c23);
     border: 6px solid var(--track-group-border, #111);
     border-radius: 16px;

@@ -1,6 +1,5 @@
-/* =========================================
-   עיצוב כללי והתאמה למבנה השחקן
-========================================= */
+/* RaceHeaderHost.css */
+
 .custom-race-header {
     width: 100%;
     box-sizing: border-box;
@@ -29,12 +28,10 @@
     width: 100%;
 }
 
-/* מאפשר לתפריט השחקנים לגלוש החוצה מהפאנל כשהוא פתוח */
 .header-collapse-wrapper.dropdown-open {
     overflow: visible;
 }
 
-/* מוודא שכאשר הכותרת הראשית נסגרת, התוכן נחתך כדי שהאנימציה תעבוד נקי */
 .custom-race-header.closed .header-collapse-wrapper {
     max-height: 0;
     padding-top: 0;
@@ -50,9 +47,6 @@
     opacity: 0;
 }
 
-/* =========================================
-   מיכל כפתורי חצי העיגול (לשוניות תחתונות)
-========================================= */
 .header-bottom-tabs-container {
     direction: ltr;
     position: absolute;
@@ -90,7 +84,6 @@
     transition: transform 0.2s ease, background-color 0.2s, color 0.2s !important;
 }
 
-/* לשונית משיכה - כפתור מרכזי */
 .header-toggle-btn {
     all: unset;
     box-sizing: border-box;
@@ -119,9 +112,6 @@
     color: var(--blue);
 }
 
-/* =========================================
-   שורות פנים - גריד חכם
-========================================= */
 .header-top-row {
     display: grid;
     grid-template-columns: 1fr minmax(200px, 350px) 1fr;
@@ -155,9 +145,6 @@
     border-radius: 2px;
 }
 
-/* =========================================
-   צד ימין (פרטי חדר ומנהל - הותאם לשחקן)
-========================================= */
 .room-details { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; max-width: 100%; }
 .room-name-and-code { display: flex; align-items: center; gap: 12px; max-width: 100%; }
 .room-name-and-code h2 { margin: 0; font-size: 1.1rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
@@ -190,9 +177,6 @@
 .blue-text { color: var(--blue); }
 .gray-text { color: var(--text); font-style: italic; font-size: 0.8rem; }
 
-/* =========================================
-   אמצע: טיימר ופס התקדמות
-========================================= */
 .header-timer-area {
     justify-self: center; width: 100%; max-width: 100%; display: flex; flex-direction: column;
     align-items: center; gap: 4px; box-sizing: border-box; min-width: 0;
@@ -208,9 +192,6 @@
 
 @keyframes pulse-danger { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-/* =========================================
-   צד שמאל (כפתורי מנהל ורשימת משתתפים)
-========================================= */
 .race-control-buttons {
     display: flex;
     flex-direction: column;
@@ -269,15 +250,12 @@
 .players-toggle-btn:hover, .dropdown-filter-btn:hover { background: var(--border); }
 .dropdown-filter-btn { padding: 0 10px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; background: var(--code-bg); color: var(--text-h); border: 2px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
 
-/* =========================================
-   כלי סינון וחיפוש ב-Dropdown של השחקנים
-========================================= */
 .players-dropdown {
     position: absolute;
     top: 100%;
     margin-top: 10px;
-    left: 0; /* מוקם מחדש לשמאל במקום לימין */
-    right: auto; /* משחרר את הנעילה מימין */
+    left: 0;
+    right: auto;
     background: var(--bg);
     border: 2px solid var(--border);
     border-radius: 8px;
@@ -294,9 +272,6 @@
 .dropdown-search-input:focus { border-color: var(--blue); box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
 .no-players-found { text-align: center; color: var(--text); padding: 20px 0; font-size: 0.9rem; }
 
-/* =========================================
-   רשימת השחקנים ועיצוב שורה
-========================================= */
 .players-list { display: flex; flex-direction: column; gap: 8px; max-height: 290px; overflow-y: auto; padding-left: 6px; }
 .players-list::-webkit-scrollbar { width: 6px; }
 .players-list::-webkit-scrollbar-track { background: var(--bg); border-radius: 10px; }
@@ -312,18 +287,12 @@
 .player-username { font-size: 0.8rem; margin-top: 2px; font-family: var(--mono); }
 .player-score { font-weight: 900; background: var(--bg); color: var(--text-h); padding: 6px 10px; border-radius: 6px; font-size: 1rem; border: 1px solid var(--border); }
 
-/* =========================================
-   סטטוס התחברות וקבוע
-========================================= */
 .status-dot { position: static !important; margin: 0 !important; width: 10px; height: 10px; border-radius: 50%; display: block; flex-shrink: 0; }
 .status-dot.online { background-color: var(--green); box-shadow: 0 0 8px rgba(34, 197, 94, 0.6); animation: pulse-online 2s infinite; }
 @keyframes pulse-online { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); } 70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
 .status-dot.offline { background-color: var(--text); }
 .player-row.row-offline { opacity: 0.6; }
 
-/* =========================================
-   כפתור הסרת שחקן
-========================================= */
 .kick-btn { position: absolute; left: 0; top: 0; bottom: 0; width: 22px; background-color: var(--red); color: white; border: none; font-size: 1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transform: translateX(-100%); transition: all 0.2s ease-in-out; border-radius: 6px 0 0 6px; }
 .player-row:hover .kick-btn { opacity: 1; transform: translateX(0); }
 .kick-btn:hover { background-color: #dc2626; box-shadow: inset 0 0 5px rgba(0,0,0,0.3); }
@@ -331,9 +300,6 @@
 .players-count-footer { position: relative; margin-top: 10px; padding-top: 12px; text-align: center; font-size: 0.85rem; color: var(--text); font-weight: bold; }
 .players-count-footer::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 85%; height: 1px; background-color: var(--border); }
 
-/* =========================================
-   רספונסיביות
-========================================= */
 @media (max-width: 1100px) {
     .header-top-row { gap: 10px; }
 }

@@ -29,7 +29,6 @@ function TopAlertBanner({ alertConfig }) {
 
     return (
         <>
-            {/* הזרקת האנימציה ישירות לקומפוננטה כדי שתהיה עצמאית לחלוטין */}
             <style>
                 {`
                     @keyframes slideDownAlert {

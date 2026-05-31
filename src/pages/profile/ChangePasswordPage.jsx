@@ -1,14 +1,14 @@
-import {useEffect, useState} from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Card from "../../components/ui/Card.jsx";
 import Input from "../../components/ui/Input.jsx";
 import Button from "../../components/ui/Button.jsx";
-import { changePassword } from "../../services/authService.js";
 
 import ErrorToast from "../../components/ui/ErrorToast.jsx";
 import { getErrorMessage } from "../../utils/errorMapper.js";
 
 import './ChangePasswordPage.css';
+import { changePassword } from "../../services/userProfileService.js";
 
 function ChangePasswordPage() {
     const navigate = useNavigate();
@@ -31,14 +31,43 @@ function ChangePasswordPage() {
         }));
     };
 
+    const validateForm = () => {
+        const { oldPassword, newPassword, confirmPassword } = formData;
+
+        if (!oldPassword.trim()) {
+            setErrorMessage("Current password is required.");
+            return false;
+        }
+        if (oldPassword.length > 255) {
+            setErrorMessage("Current password length is invalid.");
+            return false;
+        }
+
+        if (newPassword.length < 6 || newPassword.length > 15) {
+            setErrorMessage("New password must be between 6 and 15 characters long.");
+            return false;
+        }
+
+        const passwordRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])\S+$/;
+        if (!passwordRegex.test(newPassword)) {
+            setErrorMessage("Password must contain at least one digit, at least one letter, and no spaces.");
+            return false;
+        }
+
+        if (newPassword !== confirmPassword) {
+            setErrorMessage("The new passwords do not match.");
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (isLoading) return;
 
-        // בדיקה שהסיסמאות החדשות תואמות לפני השליחה לשרת
-        if (formData.newPassword !== formData.confirmPassword) {
-            setErrorMessage("The new passwords do not match.");
+        if (!validateForm()) {
             return;
         }
 
@@ -53,14 +82,12 @@ function ChangePasswordPage() {
             });
 
             if (response.success === true) {
-                // הצגת מודאל ההצלחה
                 setAlert({
                     title: "Success!",
                     message: "Password changed successfully! You are being redirected to manage profile.",
                     onClose: () => navigate('/manage-profile')
                 });
 
-                // מעבר אוטומטי אחרי 5 שניות
                 setTimeout(() => navigate('/manage-profile'), 5000);
             } else {
                 const code = response.errorCode;
@@ -90,7 +117,7 @@ function ChangePasswordPage() {
             <Card className="theme-red">
                 <div>
                     <h2>Change Your Password</h2>
-                    <p>Enter your current password and choose a new one (8-14 characters) to keep your account safe.</p>
+                    <p>Enter your current password and choose a new one (6-15 characters) to keep your account safe.</p>
                 </div>
 
                 <form className="change-password-form" onSubmit={handleSubmit}>
@@ -101,6 +128,7 @@ function ChangePasswordPage() {
                         value={formData.oldPassword}
                         onChange={handleChange}
                         required
+                        maxLength={255}
                         disabled={isLoading}
                     />
 
@@ -111,6 +139,10 @@ function ChangePasswordPage() {
                         value={formData.newPassword}
                         onChange={handleChange}
                         required
+                        minLength={6}
+                        maxLength={15}
+                        pattern={"^(?=.*[0-9])(?=.*[a-zA-Z])\\S+$"}
+                        title={"Password must contain at least one digit, at least one letter, and no spaces"}
                         disabled={isLoading}
                     />
 
@@ -121,6 +153,10 @@ function ChangePasswordPage() {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         required
+                        minLength={6}
+                        maxLength={15}
+                        pattern={"^(?=.*[0-9])(?=.*[a-zA-Z])\\S+$"}
+                        title={"Password must contain at least one digit, at least one letter, and no spaces"}
                         disabled={isLoading}
                     />
 
@@ -133,7 +169,6 @@ function ChangePasswordPage() {
                     </Button>
                 </form>
 
-                {/* מודאל הצלחה נקי מבוסס CSS */}
                 {alert && (
                     <div className="success-modal-overlay">
                         <div className="success-modal-box">

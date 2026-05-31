@@ -10,7 +10,7 @@ import ErrorToast from "../../components/ui/ErrorToast.jsx";
 import { getErrorMessage } from "../../utils/errorMapper.js";
 
 import './Auth.css'
-import logo from "../../assets/logo.png";
+import logo from "../../../public/logo.png";
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -32,10 +32,62 @@ function RegisterPage() {
         }));
     };
 
+    const validateForm = () => {
+        const { username, email, password } = formData;
+
+        if (!username || username.trim() === "") {
+            setErrorMessage("Username is required");
+            return false;
+        }
+        if (username.length < 3 || username.length > 15) {
+            setErrorMessage("Username must be between 3 and 15 characters");
+            return false;
+        }
+        const usernameRegex = /^(?=.*[a-zA-Z])\S+$/;
+        if (!usernameRegex.test(username)) {
+            setErrorMessage("Username must contain at least one letter and no spaces");
+            return false;
+        }
+
+        if (!email || email.trim() === "") {
+            setErrorMessage("Email is required");
+            return false;
+        }
+        if (email.length > 255) {
+            setErrorMessage("Email cannot exceed 255 characters");
+            return false;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setErrorMessage("Invalid email format");
+            return false;
+        }
+
+        if (!password || password.trim() === "") {
+            setErrorMessage("Password is required");
+            return false;
+        }
+        if (password.length < 6 || password.length > 15) {
+            setErrorMessage("Password must be between 6 and 15 characters long");
+            return false;
+        }
+        const passwordRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])\S+$/;
+        if (!passwordRegex.test(password)) {
+            setErrorMessage("Password must contain at least one digit, at least one letter, and no spaces");
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (isLoading) return;
+
+        if (!validateForm()) {
+            return;
+        }
 
         setIsLoading(true);
         setErrorMessage("");
@@ -56,7 +108,6 @@ function RegisterPage() {
                     setFormData(prev => ({ ...prev, email: "", password: "" }));
                 } else if (code === 1003) {
                     setFormData(prev => ({ ...prev, username: "" }));
-                } else if (code === 1000) {
                 }
             }
         } catch (err) {
@@ -103,7 +154,11 @@ function RegisterPage() {
                         value={formData.username}
                         onChange={handleChange}
                         required
-                        disabled={isLoading} // נטרול השדה בזמן טעינה
+                        minLength={3}
+                        maxLength={15}
+                        pattern={"^(?=.*[a-zA-Z])\\S+$"}
+                        title={"Username must contain at least one letter and no spaces"}
+                        disabled={isLoading}
                     />
                     <Input
                         name={"email"}
@@ -112,6 +167,7 @@ function RegisterPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required
+                        maxLength={255}
                         disabled={isLoading}
                     />
                     <Input
@@ -121,6 +177,10 @@ function RegisterPage() {
                         value={formData.password}
                         onChange={handleChange}
                         required
+                        minLength={6}
+                        maxLength={15}
+                        pattern={"^(?=.*[0-9])(?=.*[a-zA-Z])\\S+$"}
+                        title={"Password must contain at least one digit, at least one letter, and no spaces"}
                         disabled={isLoading}
                     />
                     <Button type="submit" disabled={isLoading}>

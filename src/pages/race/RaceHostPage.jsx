@@ -86,7 +86,6 @@ function RaceHostPage() {
         const topic = `/topic/race/${roomCode}/updates`;
 
         const unsubscribeTopic = subscribe(topic, (data) => {
-            console.log("קיבלנו הודעת Topic (באבא):", data);
 
             if (data.type === 'PLAYER_JOINED') {
                 setRaceState(prevState => {
@@ -147,7 +146,6 @@ function RaceHostPage() {
                 });
 
                 if (data.type === 'RACE_RESUMED') {
-                    console.log("מבקש סנכרון נתונים פרטי מהשרת...");
                     sendMessage(`/app/race/${roomCode}/host/sync`, {});
                 }
 
@@ -214,7 +212,6 @@ function RaceHostPage() {
 
         const unsubscribeQueue = subscribe(queue, (data) => {
             if (data.type === 'RACE_FULL_STATE') {
-                console.log("סנכרון מלא מהשרת:", data.data);
                 setModalConfig(null);
                 setIsReconnecting(false);
                 setTimeOffset(Date.now() - data.data.sentAt);
@@ -247,7 +244,6 @@ function RaceHostPage() {
                 });
             }
         }, activeJoinToken,() => {
-            console.log("מבקש סנכרון התחלתי בבטחה...");
             sendMessage(`/app/race/${roomCode}/host/sync`, {});
         });
 
@@ -274,7 +270,6 @@ function RaceHostPage() {
                 setIsReconnecting(false);
             }
         } catch (error) {
-            console.error("Takeover error:", error);
             alert("Network error while trying to reconnect.");
             setIsReconnecting(false);
         }
@@ -282,10 +277,8 @@ function RaceHostPage() {
 
     useEffect(() => {
         if (error) {
-            console.log("הגיע", error);
 
             if (raceState?.status === 'FINISHED'){
-               console.log("אני מתעלם משגיאות בעת סיום מירוץ")
                 //אין צורך לטפל בשגיאות
             }else if (error === "Session closed."){
                 setTopAlert({

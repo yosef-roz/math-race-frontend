@@ -10,6 +10,7 @@ const RaceSettingsHost = ({currentNickname, currentRaceName, isPaused,
     const [nicknameInput, setNicknameInput] = useState("");
     const [raceNameInput, setRaceNameInput] = useState("");
     const [confirmAction, setConfirmAction] = useState(null);
+    const [localError, setLocalError] = useState("");
 
     const wrapperRef = useRef(null);
 
@@ -18,6 +19,7 @@ const RaceSettingsHost = ({currentNickname, currentRaceName, isPaused,
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
                 if (!confirmAction) {
                     setIsOpen(false);
+                    setLocalError("");
                 }
             }
         }
@@ -29,19 +31,48 @@ const RaceSettingsHost = ({currentNickname, currentRaceName, isPaused,
         if (!isOpen) {
             setNicknameInput(currentNickname || "");
             setRaceNameInput(currentRaceName || "");
+            setLocalError("");
         }
         setIsOpen(!isOpen);
     };
 
-    const handleUpdateNickname = () => {
-        if (nicknameInput.trim() && nicknameInput !== currentNickname) {
+    const validateName = (name, fieldName) => {
+        if (!name || name.trim() === "") return `${fieldName} is required`;
+        if (name.length > 15) return `${fieldName} cannot exceed 15 characters`;
+        if (!/^(?:.*\S){3}.*$/.test(name)) return `${fieldName} must contain at least 3 actual characters`;
+        if (!/^\S.*\S$/.test(name)) return `${fieldName} must not start or end with a space`;
+        return null;
+    };
+
+    const handleUpdateNickname = (e) => {
+        e.preventDefault();
+        setLocalError("");
+
+        const error = validateName(nicknameInput, "Nickname");
+        if (error) {
+            setLocalError(error);
+            return;
+        }
+
+        if (nicknameInput !== currentNickname) {
             if (onChangeNickname) onChangeNickname(nicknameInput);
+            setIsOpen(false);
         }
     };
 
-    const handleUpdateRaceName = () => {
-        if (raceNameInput.trim() && raceNameInput !== currentRaceName) {
+    const handleUpdateRaceName = (e) => {
+        e.preventDefault();
+        setLocalError("");
+
+        const error = validateName(raceNameInput, "Race Name");
+        if (error) {
+            setLocalError(error);
+            return;
+        }
+
+        if (raceNameInput !== currentRaceName) {
             if (onChangeRaceName) onChangeRaceName(raceNameInput);
+            setIsOpen(false);
         }
     };
 
@@ -73,40 +104,48 @@ const RaceSettingsHost = ({currentNickname, currentRaceName, isPaused,
                 <div className="settings-dropdown-panel game-card">
                     <h3 className="settings-title">Host Settings</h3>
 
+                    {localError && <div style={{ color: 'red', fontSize: '12px', marginBottom: '10px', textAlign: 'center' }}>{localError}</div>}
+
                     <div className="settings-section">
                         <label className="settings-label">Change Host Nickname:</label>
-                        <div className="nickname-input-group">
+                        <form className="nickname-input-group" onSubmit={handleUpdateNickname}>
                             <input
                                 type="text"
                                 className="nickname-input"
                                 value={nicknameInput}
                                 onChange={(e) => setNicknameInput(e.target.value)}
                                 placeholder="New nickname..."
-                                maxLength={20}
+                                required
                                 minLength={3}
+                                maxLength={15}
+                                pattern={"^\\S.*\\S$"}
+                                title="Nickname must be 3-15 characters and cannot start or end with a space"
                             />
-                            <button className="nickname-update-btn" onClick={handleUpdateNickname} title="Update nickname">
+                            <button type="submit" className="nickname-update-btn" title="Update nickname">
                                 <FaCheck />
                             </button>
-                        </div>
+                        </form>
                     </div>
 
                     <div className="settings-section">
                         <label className="settings-label">Change Race Name:</label>
-                        <div className="nickname-input-group">
+                        <form className="nickname-input-group" onSubmit={handleUpdateRaceName}>
                             <input
                                 type="text"
                                 className="nickname-input"
                                 value={raceNameInput}
                                 onChange={(e) => setRaceNameInput(e.target.value)}
                                 placeholder="New race name..."
-                                maxLength={30}
+                                required
                                 minLength={3}
+                                maxLength={15}
+                                pattern={"^\\S.*\\S$"}
+                                title="Race name must be 3-15 characters and cannot start or end with a space"
                             />
-                            <button className="nickname-update-btn" onClick={handleUpdateRaceName} title="Update race name">
+                            <button type="submit" className="nickname-update-btn" title="Update race name">
                                 <FaCheck />
                             </button>
-                        </div>
+                        </form>
                     </div>
 
                     <div className="settings-divider"></div>

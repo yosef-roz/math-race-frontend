@@ -1,3 +1,5 @@
+/* PublicRacesPage.css */
+
 .public-races-container {
     width: 100%;
     display: flex;
@@ -45,7 +47,6 @@
     margin: 0;
 }
 
-/* --- רשימת המירוצים --- */
 .races-list-wrapper {
     min-height: 200px;
     display: flex;

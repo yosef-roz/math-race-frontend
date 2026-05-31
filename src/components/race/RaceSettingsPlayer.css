@@ -1,6 +1,6 @@
-/* =========================================
-   1. מעטפת ההגדרות
-========================================= */
+/* RaceSettingsPlayer.css */
+
+
 .race-settings-wrapper {
     position: relative;
     display: inline-block;
@@ -8,15 +8,6 @@
     z-index: 100;
 }
 
-/* =========================================
-   2. הלשונית (גלגל שיניים) - עם הרקע של הגבול, בלי תזוזה!
-========================================= */
-/* =========================================
-   2. הלשונית (גלגל שיניים) - גודל מקורי, בלי לקפוץ!
-========================================= */
-/* =========================================
-   2. הלשונית (גלגל שיניים) - רק ביטול הקפיצה!
-========================================= */
 .settings-tab-btn {
     appearance: none !important;
     box-sizing: border-box !important;
@@ -25,10 +16,9 @@
     border-radius: 0 0 30px 30px !important;
     background-color: var(--bg) !important;
 
-    /* מסגרת רגילה, וללא קו עליון (בדיוק כמו שהיה אצלך במקור) */
     border: 2px solid var(--border) !important;
     border-top: none !important;
-    margin-top: 0 !important; /* ביטול הדחיפה המוגזמת למעלה */
+    margin-top: 0 !important;
 
     display: flex !important;
     align-items: center !important;
@@ -42,27 +32,18 @@
 
     box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.1) !important;
 
-    /* חוסם את הקפיצה למעלה/למטה מ-index.css */
     transform: none !important;
     transition: color 0.2s ease !important;
 }
 
-/* במעבר עכבר - שומר על הגבול, לא זז! */
 .settings-tab-btn:hover,
 .settings-tab-btn.active {
     background-color: var(--bg) !important;
-
-    /* משנה רק את צבע האייקון */
     color: var(--blue) !important;
-
-    /* מונע מהכפתור לקפוץ */
     transform: none !important;
-
-    /* מוסיף את ה"רקע של הגבול" (הצללה קשיחה כמו ב-index.css) */
     box-shadow: 0 4px 0 var(--border) !important;
 }
 
-/* סיבוב חלק של גלגל השיניים */
 .gear-icon {
     transition: transform 0.3s ease !important;
 }
@@ -72,9 +53,6 @@
     transform: rotate(90deg) !important;
 }
 
-/* =========================================
-   3. פאנל ההגדרות (התפריט הנפתח)
-========================================= */
 .settings-dropdown-panel {
     position: absolute;
     top: 100%;
@@ -109,9 +87,6 @@
     padding-bottom: 10px !important;
 }
 
-/* =========================================
-   4. אזורי קלט
-========================================= */
 .settings-section {
     display: flex !important;
     flex-direction: column !important;
@@ -148,9 +123,6 @@
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
 }
 
-/* =========================================
-   5. כפתור עדכון (עם V לבן וברור)
-========================================= */
 .nickname-update-btn {
     all: unset !important;
     box-sizing: border-box !important;
@@ -187,9 +159,6 @@
     display: block !important;
 }
 
-/* =========================================
-   6. מפריד וכפתור יציאה
-========================================= */
 .settings-divider {
     height: 1px !important;
     background-color: var(--border) !important;
@@ -233,9 +202,6 @@
     margin-right: 8px !important;
 }
 
-/* =========================================
-   7. התאמות למנהל (למקרה שאתה משתמש באותו קובץ)
-========================================= */
 .host-actions-section {
     display: flex !important;
     flex-direction: column !important;
@@ -288,9 +254,6 @@
     color: white !important;
 }
 
-/* =========================================
-   8. התאמות למובייל
-========================================= */
 @media (max-width: 500px) {
     .settings-dropdown-panel {
         width: 250px !important;

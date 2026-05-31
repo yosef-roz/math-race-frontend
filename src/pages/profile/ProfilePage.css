@@ -1,18 +1,16 @@
-/*ProfilePage*.
-/* Container design to center everything */
+/* ProfilePage.css */
+
 .profile-card-design {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    /* התיקון: מאפשר לתוכן להתפרס על כל הקופסה המעוצבת של הלייאוט */
     max-width: 100%;
     margin: 0 auto;
     padding: 20px 0;
 }
 
-/* Avatar styling - scaled up version of the modal's avatar */
 .profile-avatar-large {
     width: 100px;
     height: 100px;
@@ -29,7 +27,6 @@
     background-color: var(--blue);
 }
 
-/* Typography */
 .profile-display-name {
     font-size: 28px;
     font-weight: 900;
@@ -47,25 +44,20 @@
     color: var(--text);
     margin: 0 0 32px 0;
     text-align: center;
-
-    /* מאפשר לאימייל להישבר לשתי שורות במסכים קטנים כדי לא להיחתך */
-    word-break: break-all; /* שובר גם באמצע מילה/כתובת */
+    word-break: break-all;
     overflow-wrap: break-word;
     max-width: 100%;
-    padding: 0 10px; /* מוסיף קצת מרווח בצדדים במובייל */
+    padding: 0 10px;
 }
 
-/* Buttons Container */
 .management-actions {
     width: 100%;
-    /* התיקון: מגביל רק את הכפתורים כדי שלא יימרחו על כל המסך */
     max-width: 450px;
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-/* General Button Styling overrides */
 .management-actions button {
     width: 100%;
     font-weight: 900;
@@ -76,7 +68,6 @@
     margin: 0;
 }
 
-/* Change Password - Yellow Theme */
 .btn-change-password {
     background-color: var(--yellow) !important;
     color: #fff !important;
@@ -94,7 +85,6 @@
     box-shadow: 0 0px 0 #d97706 !important;
 }
 
-/* Delete Account - Transparent/Gray Theme */
 .btn-delete-account {
     background-color: transparent !important;
     color: var(--text-h) !important;
@@ -114,9 +104,6 @@
     box-shadow: 0 0px 0 var(--border) !important;
 }
 
-/* --- תוספות ל- ProfilePage.css --- */
-
-/* אזור עריכת שם משתמש */
 .profile-edit-section {
     width: 100%;
     max-width: 300px;
@@ -125,13 +112,10 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 8px;
-
-    /* מוודא שהאזור לא גולש החוצה במסכים ממש קטנים */
     box-sizing: border-box;
     padding: 0 10px;
 }
 
-/* כפתור שמירת שם משתמש - קטן ועדין יותר */
 .btn-save-username {
     background-color: var(--green, #4CAF50) !important;
     color: white !important;
@@ -161,7 +145,6 @@
     transform: none;
 }
 
-/* הודעות משוב (הצלחה/שגיאה) */
 .profile-feedback-message {
     width: 100%;
     max-width: 450px;

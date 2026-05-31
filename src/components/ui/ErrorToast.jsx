@@ -6,7 +6,7 @@ function ErrorToast({ message, onClose }) {
         if (message) {
             const timer = setTimeout(() => {
                 onClose();
-            }, 8000);
+            }, 3000);
             return () => clearTimeout(timer);
         }
     }, [message, onClose]);

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import ProfileModal from "../pages/profile/ProfileModal.jsx";
 import { myProfile } from "../services/userProfileService.js";
 import { useWebSocket } from "../services/webSocket/WebSocketContext.js";
-import logo from '../assets/logo.png';
+import logo from '../../public/logo.png';
 import './MainLayout.css';
 import {FaXmark} from "react-icons/fa6";
 
@@ -15,7 +15,6 @@ function MainLayout() {
     const location = useLocation();
     const { isConnected, sendMessage, lastMessage,clearLastMessage } = useWebSocket();
     const [activeRaceNotification, setActiveRaceNotification] = useState(null);
-    // ===================================
 
     useEffect(() => {
         const fetchUserData = async () => {

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { myStatistics } from "../../services/userProfileService.js";
-
-// ייבוא קובץ ה-CSS כמודול
 import styles from './StatisticsPage.module.css';
 
 function StatisticsPage() {
@@ -35,7 +33,6 @@ function StatisticsPage() {
         <div className={styles.statisticsContainer}>
             <h2 className={styles.statisticsTitle}>Player Statistics</h2>
 
-            {/* רשת הנתונים - ללא כרטיסייה נוספת */}
             <div className={styles.statsGridContainer}>
 
                 <div className={styles.statItem}>

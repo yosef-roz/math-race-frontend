@@ -22,6 +22,22 @@ function ResetPasswordPage() {
     const handleAction = async (password) => {
         if (isLoading) return;
 
+        if (!password || password.trim() === "") {
+            setErrorMessage("New password is required");
+            return;
+        }
+
+        if (password.length < 6 || password.length > 15) {
+            setErrorMessage("Password must be between 6 and 15 characters long");
+            return;
+        }
+
+        const passwordRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])\S+$/;
+        if (!passwordRegex.test(password)) {
+            setErrorMessage("Password must contain at least one digit, at least one letter, and no spaces");
+            return;
+        }
+
         setIsLoading(true);
         setErrorMessage("");
         setAlert(null);

@@ -2,7 +2,6 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RaceResults.css';
 
-// --- תת קומפוננטה: תצוגת שם משתמש ---
 const UserNameDisplay = React.memo(({ userName }) => {
     if (userName && userName.trim() !== "") {
         return <span className="username-display username-blue">@{userName}</span>;
@@ -10,7 +9,6 @@ const UserNameDisplay = React.memo(({ userName }) => {
     return <span className="username-display username-guest">-Guest-</span>;
 });
 
-// --- תת קומפוננטה: עיגול סטטיסטיקה ---
 const StatItem = React.memo(({ title, value, winnerId, winnerNickname, winnerUserName, color, isRaceStat, isHighlighted, isDimmed, onHighlight, pieData }) => {
     return (
         <div
@@ -67,7 +65,6 @@ const StatItem = React.memo(({ title, value, winnerId, winnerNickname, winnerUse
     );
 });
 
-// --- תת קומפוננטה: שורה בטבלת המובילים ---
 const LeaderboardRow = React.memo(({ player, rank, achievements, isHighlighted, isDimmed, isCurrentPlayer, onHighlight }) => {
     return (
         <div
@@ -103,7 +100,6 @@ const LeaderboardRow = React.memo(({ player, rank, achievements, isHighlighted, 
     );
 });
 
-// --- קומפוננטה ראשית ---
 function RaceResults({ raceState, currentPlayerId }) {
     const navigate = useNavigate();
     const [highlightedPlayerId, setHighlightedPlayerId] = useState(null);
@@ -181,7 +177,6 @@ function RaceResults({ raceState, currentPlayerId }) {
             )}
 
             <div className="main-layout">
-                {/* צד ימין - סטטיסטיקות שחקנים */}
                 <div className="side-group">
                     {playerStats.map(stat => (
                         <StatItem
@@ -221,13 +216,11 @@ function RaceResults({ raceState, currentPlayerId }) {
                         </div>
                     </div>
 
-                    {/* הכפתור בחוץ לגמרי */}
                     <button className="back-to-home-btn" onClick={() => navigate('/')}>
                         Back to Home
                     </button>
                 </div>
 
-                {/* צד שמאל - סטטיסטיקות המירוץ */}
                 <div className="side-group">
                     {raceStats.map(stat => (
                         <StatItem
