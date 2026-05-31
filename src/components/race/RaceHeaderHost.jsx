@@ -46,7 +46,6 @@ const RaceHeaderHost = ({ raceState, livePlayers, localTimeLeft, onPlayerClick, 
     const totalTime = raceState.totalDurationMillis || 1;
     const timePercent = Math.max(0, Math.min(100, (validTimeLeft / totalTime) * 100));
 
-    // מניעת אזהרת זמן אדום בזמן Pending
     const isDanger = validTimeLeft <= 10000 && validTimeLeft > 0 && !isPending;
 
     let statusClass = 'active';

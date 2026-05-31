@@ -150,7 +150,7 @@ const RaceHeaderPlayer = ({ raceState, localPlayer, localTimeLeft, onChangeNickn
                             onChangeNickname={onChangeNickname}
                             onLeaveRace={handleLeaveClick}
                         />
-                        <RaceMessages messages={messages} />
+                        {!isPending && <RaceMessages messages={messages} />}
                     </div>
 
                     <button

@@ -56,7 +56,6 @@
 .invite-actions { display: flex; gap: 12px; width: 100%; }
 .invite-actions button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-/* אזור השליטה שבתחתית ברקוד (כפתור התחל/המתנה) */
 .lobby-action-section {
     width: 100%;
     margin-top: 24px;
@@ -184,7 +183,6 @@
     transform: translateY(-4px);
 }
 
-/* הגדרות חיווי סטטוס כמו ב-RaceHeader */
 .status-dot {
     position: relative !important;
     width: 10px;
@@ -225,7 +223,6 @@
 .empty-arena { margin: auto; font-size: 20px; font-weight: 800; color: var(--text); }
 
 
-/* התאמה למסכים קטנים (מובייל / טאבלטים אנכיים) */
 @media (max-width: 768px) {
     .lobby-fullscreen-layout {
         display: flex;

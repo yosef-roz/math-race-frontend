@@ -380,7 +380,10 @@ function RaceHostPage() {
 
         switch (raceState.status) {
             case 'PENDING':
-                return <RaceLobby raceState={raceState} onStartRace={handleStartRace} isHost={true} />;
+                return <RaceLobby raceState={raceState} onStartRace={handleStartRace} isHost={true}
+                                  onKickPlayer ={handleKickPlayer} onCancelRace={handleCancelRace}
+                                  onChangeRaceName = {handleChangeRaceName} onChangeNickname = {handleChangeNickname}
+                />;
             case 'PAUSED':
             case 'IN_PROGRESS':
                 return (

@@ -410,7 +410,7 @@ function RacePlayerPage() {
 
         switch (raceState.status) {
             case 'PENDING':
-                return <RaceLobby raceState={raceState}  isHost={false} />;
+                return <RaceLobby raceState={raceState}  isHost={false} onChangeNickname={handleNicknameChange} onLeaveRace={handleLeaveRace}/>;
             case 'PAUSED':
             case 'IN_PROGRESS':
                 return <RaceActivePlayer raceState={raceState} joinToken={activeJoinToken} timeOffset={timeOffset}

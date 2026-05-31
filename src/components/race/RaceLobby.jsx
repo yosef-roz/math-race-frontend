@@ -9,7 +9,7 @@ import './RaceLobby.css';
 import RaceHeaderHost from "./RaceHeaderHost.jsx";
 import RaceHeaderPlayer from "./RaceHeaderPlayer.jsx";
 
-const PlayerAvatar = memo(({ player }) => { /* הוסרו isHost ו-onKick מהפרופס כי הם כבר לא בשימוש כאן */
+const PlayerAvatar = memo(({ player }) => {
     const isOnline = player.online !== false;
     const initial = player.nickname ? player.nickname.charAt(0).toUpperCase() : '?';
 
@@ -23,7 +23,6 @@ const PlayerAvatar = memo(({ player }) => { /* הוסרו isHost ו-onKick מה�
         <div className="player-avatar-wrapper">
             <div className="avatar-circle" style={avatarStyle}>
                 {initial}
-                {/* כפתור ה-Kick (ה-X האדום) הוסר מכאן */}
             </div>
 
             <div className="avatar-names">
@@ -44,17 +43,7 @@ const PlayerAvatar = memo(({ player }) => { /* הוסרו isHost ו-onKick מה�
 });
 
 
-function RaceLobby({
-                       raceState,
-                       onStartRace,
-                       isHost,
-                       onKickPlayer,
-                       onCancelRace,
-                       onChangeRaceName,
-                       onChangeNickname,
-                       onLeaveRace,
-                       messages = []
-                   }) {
+function RaceLobby({raceState, onStartRace, isHost, onKickPlayer, onCancelRace, onChangeRaceName, onChangeNickname, onLeaveRace}) {
     const inviteLink = `${window.location.origin}/race/join?code=${raceState.roomCode}`;
 
     const [copyCodeSuccess, setCopyCodeSuccess] = useState(false);
@@ -156,12 +145,10 @@ function RaceLobby({
                     localTimeLeft={raceState.totalDurationMillis}
                     onChangeNickname={onChangeNickname}
                     onLeaveRace={onLeaveRace}
-                    messages={messages}
                 />
             )}
 
             <div className="lobby-fullscreen-layout">
-                {/* אזור מרכזי - רשימת שחקנים */}
                 <main className="lobby-center-arena">
                     <div className="arena-header">
                         <h2>Players Joined <span className="player-count-badge">{displayPlayers.length}</span></h2>
@@ -185,7 +172,6 @@ function RaceLobby({
                     </div>
                 </main>
 
-                {/* בר צד ימין - הזמנה וברקוד */}
                 <aside className="lobby-sidebar right-sidebar">
                     <div className="invite-dashed-box">
                         <p className="invite-title">Invite Players</p>
@@ -236,13 +222,12 @@ function RaceLobby({
                             </Button>
                         </div>
 
-                        {/* החלק החדש של השליטה בתחתית הפאנל */}
                         <div className="lobby-action-section">
                             {isHost ? (
                                 <Button
                                     className="start-massive-btn"
                                     onClick={onStartRace}
-                                    disabled={raceState.players.length < 2} /* מוודא שיש לפחות 2 שחקנים סה"כ */
+                                    disabled={raceState.players.length < 2}
                                 >
                                     Start Race
                                 </Button>

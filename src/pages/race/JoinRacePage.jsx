@@ -50,6 +50,10 @@ function JoinRacePage() {
     const validateForm = () => {
         const { nickname } = formData;
 
+        if (!nickname || nickname.trim() === "") {
+            return true;
+        }
+
         if (nickname.length > 15) {
             setAlert({
                 type: ALERT_TYPES.ERROR,
@@ -96,12 +100,16 @@ function JoinRacePage() {
         clearError();
         clearLastMessage();
 
+        const payload = {
+            roomCode: formData.roomCode,
+            nickname: (!formData.nickname || formData.nickname.trim() === "") ? null : formData.nickname
+        };
+
         try {
-            const response = await joinRace(formData);
+            const response = await joinRace(payload);
             console.log(response);
             if (response.success) {
                 const { code, joinToken, type } = response.data;
-                console.log(joinToken + " יש טוקן לכניסה ");
                 navigate(`/race/${code}/${type.toLowerCase()}`, {
                     state: { joinToken: joinToken }
                 });
@@ -185,11 +193,7 @@ function JoinRacePage() {
                         value={formData.nickname}
                         onChange={handleChange}
                         autoFocus={isCodeLocked}
-                        required
-                        minLength={3}
                         maxLength={15}
-                        pattern={"^[^\\s].*[^\\s]$"}
-                        title="Nickname must be 3-15 characters and cannot start or end with a space"
                     />
 
                     <Button  type={"submit"} disabled={isSubmitting}>
