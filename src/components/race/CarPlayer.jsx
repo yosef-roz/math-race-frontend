@@ -137,9 +137,10 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
 
     const timerProgress = activeTask ? ((timeLimit - localRemainingState) / timeLimit) * 100 : 0;
 
+
     let dynamicZIndex = 5;
-    if (isHighlighted) dynamicZIndex = 200;
-    else if (showInfoCard) dynamicZIndex = 150;
+    if (showInfoCard) dynamicZIndex = 20000000;
+    else if (isHighlighted) dynamicZIndex = 200;
     else if (activeBubble) dynamicZIndex = 50 + (activeBubble.id % 10000000);
 
     const isMessageValid = () => {
@@ -162,14 +163,15 @@ function CarPlayer({ player, targetScore, roadIndex, laneIndex, isHighlighted, o
 
     return (
         <div
-            className={`car-container ${!player.online ? 'car-offline' : ''} ${isHighlighted ? 'car-highlighted' : ''}`}
+            className={`car-container ${!player.online ? 'car-offline' : ''} ${isHighlighted ? 'car-highlighted' : ''} ${showInfoCard ? 'car-super-top' : ''}`}
             style={{
                 left: `calc(20px + (100% - 94px) * ${progressPercent / 100})`,
                 top: `${laneCenterY}px`,
                 zIndex: dynamicZIndex
             }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            onPointerEnter={() => setIsHovered(true)}
+            onPointerLeave={() => setIsHovered(false)}
+            onPointerCancel={() => setIsHovered(false)}
         >
             {showInfoCard && (
                 <div className={`player-info-card ${verticalClass} ${shiftClass}`}>
